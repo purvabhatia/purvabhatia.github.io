@@ -545,6 +545,108 @@
       max-width: calc(100% - 8rem);
     }
 
+    /* ── SKILL GROUPS ── */
+    .skills-group { margin-top: 1.5rem; }
+    .skills-group + .skills-group { margin-top: 1rem; }
+    .skills-group-label {
+      font-family: var(--mono-font);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .skills-group .skills-list { margin-top: 0; }
+
+    /* ── EDUCATION ── */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .edu-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem;
+    }
+    .edu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .edu-degree { font-weight: 600; font-size: 1rem; margin-bottom: 0.3rem; }
+    .edu-school { font-size: 0.875rem; color: var(--muted); }
+    .edu-meta { text-align: right; flex-shrink: 0; }
+    .edu-gpa {
+      font-family: var(--mono-font);
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-top: 0.4rem;
+    }
+    .edu-section-title {
+      font-family: var(--mono-font);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+      margin-top: 1rem;
+    }
+    .edu-section-title:first-child { margin-top: 0; }
+    .edu-text { font-size: 0.875rem; color: var(--muted); font-weight: 300; line-height: 1.7; }
+    .edu-list { list-style: none; padding: 0; }
+    .edu-list li {
+      font-size: 0.875rem;
+      color: var(--muted);
+      font-weight: 300;
+      padding-left: 1.25rem;
+      position: relative;
+      margin-bottom: 0.35rem;
+    }
+    .edu-list li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 0.75rem; }
+
+    /* ── CERTIFICATIONS ── */
+    .cert-list {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .cert-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 2rem;
+      padding: 1.25rem 1.75rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      transition: background 0.2s;
+    }
+    .cert-item:last-child { border-bottom: none; }
+    .cert-item:hover { background: var(--surface2); }
+    .cert-left { display: flex; align-items: flex-start; gap: 1.25rem; }
+    .cert-index {
+      font-family: var(--mono-font);
+      font-size: 0.72rem;
+      color: var(--muted);
+      padding-top: 0.2rem;
+      flex-shrink: 0;
+    }
+    .cert-name { font-weight: 500; font-size: 0.95rem; line-height: 1.4; }
+    .cert-detail { font-size: 0.8rem; color: var(--muted); font-weight: 300; margin-top: 0.25rem; }
+    .cert-org {
+      font-family: var(--mono-font);
+      font-size: 0.75rem;
+      color: var(--accent);
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding-top: 0.2rem;
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
@@ -553,6 +655,7 @@
       .about-grid { grid-template-columns: 1fr; gap: 2rem; }
       .contact-inner { grid-template-columns: 1fr; }
       .projects-grid { grid-template-columns: 1fr; }
+      .edu-grid { grid-template-columns: 1fr; }
     }
 
     /* ── SCROLL ANIMATION ── */
@@ -572,10 +675,13 @@
 
   <!-- NAV -->
   <nav>
-<ul class="nav-links">
+<span class="nav-logo">Purva Bhatia</span>
+    <ul class="nav-links">
       <li><a href="#about">About</a></li>
+      <li><a href="#education">Education</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#projects">Projects</a></li>
+      <li><a href="#certifications">Certifications</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
@@ -585,9 +691,9 @@
     <div class="hero-glow"></div>
     <div class="hero-inner">
       <div class="hero-tag">FMVA® Certified · MS Financial Analytics · Class of 2026</div>
-      <h1>Hi, I'm <em>Purva Bhatia</em>.<br>I turn data into<br>financial insight.</h1>
+      <h1>Hi, I'm <em>Purva Bhatia</em>.<br>I build valuation models<br>&amp; underwrite credit.</h1>
       <p class="hero-sub">
-        FMVA® certified financial analytics professional with corporate banking experience in financial modeling, credit underwriting, and data-driven decision making.
+        FMVA® certified analyst with corporate banking experience at ICICI Bank. Seeking roles in FP&amp;A, corporate finance, investment banking, and credit analysis.
       </p>
       <div class="hero-actions">
         <a href="assets/PurvaBhatia_Resume.pdf" class="btn btn-primary" target="_blank">↓ Download Resume</a>
@@ -603,7 +709,7 @@
     <div class="about-grid reveal">
       <div class="about-text">
         <p>
-          I'm an <span>FMVA® certified Financial Analytics graduate student</span> at San José State University, specializing in financial modeling, valuation, and credit analysis.
+          I'm an <span>FMVA® certified Financial Analytics graduate student</span> at San José State University with an MBA from Narsee Monjee Institute (Dean's List 2023), specializing in financial modeling, valuation, and credit analysis.
         </p>
         <p>
           Before grad school, I spent over a year as a <span>Relationship Manager in Corporate Banking at ICICI Bank</span>, securing credit approvals exceeding USD 11M and conducting complex group-level financial analysis.
@@ -611,19 +717,27 @@
         <p>
           Outside of work, I enjoy making pizza, going for a hike, and playing Mario.
         </p>
-        <div class="skills-list">
-          <span class="skill-tag">Python</span>
-          <span class="skill-tag">SQL</span>
-          <span class="skill-tag">MS Excel (Advanced)</span>
-          <span class="skill-tag">Power BI</span>
-          <span class="skill-tag">FactSet</span>
-          <span class="skill-tag">3-Statement Modeling</span>
-          <span class="skill-tag">Financial Statement Analysis</span>
-          <span class="skill-tag">Valuation & Modeling</span>
-          <span class="skill-tag">Credit Underwriting</span>
-          <span class="skill-tag">Scenario Analysis</span>
-          <span class="skill-tag">Budgeting & Forecasting</span>
-          <span class="skill-tag">Generative AI</span>
+        <div class="skills-group">
+          <div class="skills-group-label">Tools</div>
+          <div class="skills-list">
+            <span class="skill-tag">MS Excel (Advanced)</span>
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">SQL</span>
+            <span class="skill-tag">Power BI</span>
+            <span class="skill-tag">FactSet</span>
+            <span class="skill-tag">Generative AI</span>
+          </div>
+        </div>
+        <div class="skills-group">
+          <div class="skills-group-label">Expertise</div>
+          <div class="skills-list">
+            <span class="skill-tag">3-Statement Modeling</span>
+            <span class="skill-tag">Financial Statement Analysis</span>
+            <span class="skill-tag">Valuation & Modeling</span>
+            <span class="skill-tag">Credit Underwriting</span>
+            <span class="skill-tag">Scenario Analysis</span>
+            <span class="skill-tag">Budgeting & Forecasting</span>
+          </div>
         </div>
       </div>
       <div>
@@ -641,7 +755,7 @@
             <div class="stat-desc">Years Industry Exp.</div>
           </div>
           <div class="stat-item">
-            <div class="stat-number">USD 11M+</div>
+            <div class="stat-number">$11M+</div>
             <div class="stat-desc">Credit Approvals Secured</div>
           </div>
         </div>
@@ -649,9 +763,55 @@
     </div>
   </section>
 
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="section-label">02 / Education</div>
+    <h2>Academic background</h2>
+    <div class="edu-grid reveal">
+
+      <div class="edu-card">
+        <div class="edu-header">
+          <div>
+            <div class="edu-degree">MS Financial Analytics</div>
+            <div class="edu-school">San José State University · San Jose, CA</div>
+          </div>
+          <div class="edu-meta">
+            <span class="timeline-date">Expected Aug 2026</span>
+            <div class="edu-gpa">GPA 4.0</div>
+          </div>
+        </div>
+        <div class="edu-section-title">Coursework</div>
+        <p class="edu-text">Financial Accounting · Advanced Corporate Finance · Financial Management · Business Valuation · Statistics (Regression &amp; Hypothesis Testing) · Financial Planning &amp; Analysis</p>
+        <div class="edu-section-title">Leadership &amp; Achievements</div>
+        <ul class="edu-list">
+          <li>Finalist Presenter, 22nd Silicon Valley Innovation Challenge</li>
+          <li>Program Representative, Graduate Business Student Association</li>
+        </ul>
+      </div>
+
+      <div class="edu-card">
+        <div class="edu-header">
+          <div>
+            <div class="edu-degree">MBA</div>
+            <div class="edu-school">Narsee Monjee Institute of Management Studies · Hyderabad</div>
+          </div>
+          <div class="edu-meta">
+            <span class="timeline-date">March 2023</span>
+            <div class="edu-gpa">GPA 3.33 · Dean's List</div>
+          </div>
+        </div>
+        <div class="edu-section-title">Coursework</div>
+        <p class="edu-text">Corporate Finance · Investment Analysis &amp; Portfolio Management · Wealth Management</p>
+        <div class="edu-section-title">Project</div>
+        <p class="edu-text">Developed a comprehensive business plan for an apparel aggregator, evaluating market potential, competition, procurement, logistics, and resource planning.</p>
+      </div>
+
+    </div>
+  </section>
+
   <!-- EXPERIENCE -->
   <section id="experience">
-    <div class="section-label">02 / Experience</div>
+    <div class="section-label">03 / Experience</div>
     <h2>Where I've worked</h2>
     <div class="timeline">
       <!-- JOB 1 -->
@@ -681,8 +841,8 @@
 
   <!-- PROJECTS -->
   <section id="projects">
-    <div class="section-label">03 / Projects</div>
-    <h2>Things I've built</h2>
+    <div class="section-label">04 / Projects</div>
+    <h2>Analysis &amp; Projects</h2>
     <div class="projects-grid reveal">
 
       <!-- PROJECT 1 -->
@@ -754,14 +914,64 @@
     </div>
   </section>
 
+  <!-- CERTIFICATIONS -->
+  <section id="certifications">
+    <div class="section-label">05 / Certifications</div>
+    <h2>Credentials</h2>
+    <div class="cert-list reveal">
+
+      <div class="cert-item">
+        <div class="cert-left">
+          <span class="cert-index">01</span>
+          <div>
+            <div class="cert-name">Financial Modeling &amp; Valuation Analyst (FMVA®)</div>
+          </div>
+        </div>
+        <span class="cert-org">Corporate Finance Institute</span>
+      </div>
+
+      <div class="cert-item">
+        <div class="cert-left">
+          <span class="cert-index">02</span>
+          <div>
+            <div class="cert-name">Credit Analyst Certificate</div>
+            <div class="cert-detail">Prepared full credit memo and delivered a mock loan committee presentation</div>
+          </div>
+        </div>
+        <span class="cert-org">Heritage Bank of Commerce</span>
+      </div>
+
+      <div class="cert-item">
+        <div class="cert-left">
+          <span class="cert-index">03</span>
+          <div>
+            <div class="cert-name">Real-Time Stock Market Dashboard with Power BI</div>
+          </div>
+        </div>
+        <span class="cert-org">Coursera</span>
+      </div>
+
+      <div class="cert-item">
+        <div class="cert-left">
+          <span class="cert-index">04</span>
+          <div>
+            <div class="cert-name">Global Financial Markets &amp; Instruments</div>
+          </div>
+        </div>
+        <span class="cert-org">Rice University</span>
+      </div>
+
+    </div>
+  </section>
+
   <!-- CONTACT -->
   <section id="contact">
     <div class="contact-inner reveal">
       <div class="contact-cta">
-        <div class="section-label">04 / Contact</div>
+        <div class="section-label">06 / Contact</div>
         <h2>Let's connect</h2>
         <p>
-          Open to full-time roles, internships, and research collaborations in financial analytics, quantitative finance, and data science.
+          Open to full-time roles and internships in FP&amp;A, corporate finance, investment banking, and credit analysis.
         </p>
         <a href="assets/PurvaBhatia_Resume.pdf" class="btn btn-primary" target="_blank">↓ Download Resume</a>
       </div>
