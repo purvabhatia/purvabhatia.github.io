@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mortgage Calculator — Openera | Purva Bhatia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --surface: #13161d;
+      --surface2: #1a1e28;
+      --border: rgba(255,255,255,0.07);
+      --accent: #c8f064;
+      --accent2: #64d4f0;
+      --text: #e8eaf0;
+      --muted: #7a8090;
+      --heading-font: 'DM Serif Display', serif;
+      --body-font: 'DM Sans', sans-serif;
+      --mono-font: 'DM Mono', monospace;
+      --green: #4ade80;
+      --yellow: #facc15;
+      --red: #f87171;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body-font);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,240,100,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,240,100,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(13,15,20,0.85);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--mono-font);
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-decoration: none;
+    }
+
+    .nav-back {
+      font-family: var(--mono-font);
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    /* HERO HEADER */
+    .page-header {
+      padding: 8rem 4rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-tag {
+      font-family: var(--mono-font);
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .header-tag::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .page-header h1 {
+      font-family: var(--heading-font);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .page-header h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .page-header p {
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 300;
+      max-width: 560px;
+    }
+
+    .glow {
+      position: absolute;
+      top: 0; right: -10%;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(200,240,100,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* MAIN LAYOUT */
+    .main-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 4rem 6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    /* INPUT PANEL */
+    .panel {
+      background: var(--surface);
+      padding: 2.5rem;
+    }
+
+    .panel-label {
+      font-family: var(--mono-font);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .panel-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .field {
+      margin-bottom: 1.5rem;
+    }
+
+    .field label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      color: var(--muted);
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+
+    .field label span {
+      font-family: var(--mono-font);
+      font-size: 0.75rem;
+      color: var(--accent);
+    }
+
+    .field input[type="number"],
+    .field input[type="range"],
+    .field select {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text);
+      font-family: var(--body-font);
+      font-size: 0.95rem;
+      padding: 0.65rem 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .field input[type="number"]:focus,
+    .field select:focus {
+      border-color: rgba(200,240,100,0.4);
+    }
+
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%237a8090' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.9rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+
+    .field select option {
+      background: #1a1e28;
+    }
+
+    .range-wrap {
+      position: relative;
+    }
+
+    input[type="range"] {
+      padding: 0;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--surface2);
+      border: none;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono-font);
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0.9rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+    }
+
+    .toggle-row label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .toggle {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .toggle input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--surface2);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+      border: 1px solid var(--border);
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 14px; height: 14px;
+      left: 2px; top: 2px;
+      background: var(--muted);
+      border-radius: 50%;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .toggle input:checked + .toggle-slider { background: rgba(200,240,100,0.15); border-color: rgba(200,240,100,0.3); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(16px); background: var(--accent); }
+
+    /* RESULTS PANEL */
+    .results-panel {
+      background: var(--surface2);
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .total-display {
+      margin-bottom: 2rem;
+    }
+
+    .total-label {
+      font-family: var(--mono-font);
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .total-amount {
+      font-family: var(--heading-font);
+      font-size: 3.5rem;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .total-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: var(--mono-font);
+    }
+
+    /* BREAKDOWN BARS */
+    .breakdown {
+      margin-bottom: 2rem;
+    }
+
+    .breakdown-bar-track {
+      height: 6px;
+      background: var(--bg);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 1.25rem;
+      display: flex;
+    }
+
+    .bar-seg {
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+
+    .breakdown-items {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0.9rem;
+      background: var(--bg);
+      border-radius: 2px;
+      border: 1px solid var(--border);
+    }
+
+    .breakdown-item-left {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .breakdown-item-name {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .breakdown-item-val {
+      font-family: var(--mono-font);
+      font-size: 0.82rem;
+      color: var(--text);
+    }
+
+    /* AFFORDABILITY */
+    .afford-block {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .afford-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .afford-title {
+      font-family: var(--mono-font);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .afford-badge {
+      font-family: var(--mono-font);
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    .afford-badge.green { background: rgba(74,222,128,0.12); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+    .afford-badge.yellow { background: rgba(250,204,21,0.12); color: var(--yellow); border: 1px solid rgba(250,204,21,0.2); }
+    .afford-badge.red { background: rgba(248,113,113,0.12); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
+
+    .afford-meter-track {
+      height: 8px;
+      background: var(--surface2);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+
+    .afford-meter-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease, background 0.4s ease;
+      max-width: 100%;
+    }
+
+    .afford-sub {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--mono-font);
+      font-size: 0.68rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+      flex-wrap: nowrap;
+    }
+
+    .income-field {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-top: 0.75rem;
+    }
+
+    .income-field label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .income-field input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text);
+      font-family: var(--mono-font);
+      font-size: 0.85rem;
+      padding: 0.45rem 0.75rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .income-field input:focus { border-color: rgba(200,240,100,0.4); }
+
+    /* KEY METRICS */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .metric {
+      background: var(--surface);
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .metric-val {
+      font-family: var(--heading-font);
+      font-size: 1.8rem;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .metric-label {
+      font-family: var(--mono-font);
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* AMORTIZATION */
+    .amort-section {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .amort-header {
+      background: var(--surface);
+      padding: 1.25rem 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .amort-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .amort-title {
+      font-family: var(--mono-font);
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .amort-toggle-btn {
+      font-family: var(--mono-font);
+      font-size: 0.72rem;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .amort-header:hover .amort-toggle-btn { color: var(--accent); }
+
+    .amort-body {
+      display: none;
+    }
+
+    .amort-body.open { display: block; }
+
+    .amort-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .amort-table thead tr {
+      background: var(--surface);
+    }
+
+    .amort-table th {
+      font-family: var(--mono-font);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0.75rem 1.25rem;
+      text-align: right;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .amort-table th:first-child { text-align: left; }
+
+    .amort-table td {
+      padding: 0.6rem 1.25rem;
+      font-family: var(--mono-font);
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: right;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .amort-table td:first-child {
+      text-align: left;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .amort-table tr:hover td { background: var(--surface2); }
+
+    .amort-chart-wrap {
+      padding: 1.5rem 1.75rem;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+    }
+
+    .amort-chart-label {
+      font-family: var(--mono-font);
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .amort-bars {
+      display: flex;
+      gap: 3px;
+      align-items: flex-end;
+      height: 80px;
+    }
+
+    .amort-bar-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      flex: 1;
+    }
+
+    .amort-bar-interest {
+      background: rgba(248,113,113,0.6);
+      border-radius: 1px 1px 0 0;
+      min-height: 2px;
+      transition: height 0.3s ease;
+    }
+
+    .amort-bar-principal {
+      background: var(--accent);
+      opacity: 0.7;
+      border-radius: 1px 1px 0 0;
+      min-height: 2px;
+      transition: height 0.3s ease;
+    }
+
+    .amort-legend {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--mono-font);
+      font-size: 0.68rem;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 8px; height: 8px;
+      border-radius: 1px;
+    }
+
+    /* PROJECT CONTEXT */
+    .context-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem 2.5rem;
+      margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .context-title {
+      font-family: var(--mono-font);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .context-text {
+      font-size: 0.875rem;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    .context-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+
+    .ctx-tag {
+      font-family: var(--mono-font);
+      font-size: 0.68rem;
+      color: var(--accent2);
+      border: 1px solid rgba(100,212,240,0.2);
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 4rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-family: var(--mono-font);
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .page-header, .main-wrap { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .calc-grid { grid-template-columns: 1fr; }
+      .metrics-row { grid-template-columns: 1fr 1fr; }
+      .context-block { grid-template-columns: 1fr; gap: 1rem; }
+    }
+
+    @media (max-width: 540px) {
+      .metrics-row { grid-template-columns: 1fr; }
+      .total-amount { font-size: 2.8rem; }
+    }
+
+    /* Animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeInUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in:nth-child(1) { animation-delay: 0.05s; }
+    .fade-in:nth-child(2) { animation-delay: 0.15s; }
+    .fade-in:nth-child(3) { animation-delay: 0.25s; }
+    .fade-in:nth-child(4) { animation-delay: 0.35s; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Purva Bhatia</a>
+    <a href="index.html#projects" class="nav-back">← Back to Projects</a>
+  </nav>
+
+  <div class="page-header">
+    <div class="glow"></div>
+    <div class="header-tag">Project — Openera · Revenue Model & Mortgage Calculator</div>
+    <h1>Mortgage<br><em>Affordability</em><br>Simulator</h1>
+    <p>A customer-facing calculator built for Openera, enabling data-driven affordability analysis across all 50 states — incorporating credit score pricing, property tax, home insurance, and HOA costs.</p>
+  </div>
+
+  <div class="main-wrap">
+
+    <!-- PROJECT CONTEXT -->
+    <div class="context-block fade-in">
+      <div>
+        <div class="context-title">About this project</div>
+        <p class="context-text">Built a revenue model and mortgage affordability calculator in Excel for Openera, a proptech startup. The simulator enables customers to model total monthly housing costs and evaluate affordability against their income — supporting both financial planning and customer acquisition.</p>
+        <div class="context-tags">
+          <span class="ctx-tag">Excel</span>
+          <span class="ctx-tag">Revenue Modeling</span>
+          <span class="ctx-tag">Startup Finance</span>
+          <span class="ctx-tag">PMT Function</span>
+          <span class="ctx-tag">VLOOKUP</span>
+          <span class="ctx-tag">Scenario Analysis</span>
+        </div>
+      </div>
+      <div>
+        <div class="context-title">Model features</div>
+        <p class="context-text">Credit score-adjusted interest rates · State-level property tax (all 50 states) · State-level home insurance premiums · HOA fee toggle · Affordability index vs. monthly income · Full loan amortization schedule · Revenue model with subscription tiers</p>
+      </div>
+    </div>
+
+    <!-- KEY METRICS ROW -->
+    <div class="metrics-row fade-in">
+      <div class="metric">
+        <div class="metric-val" id="m-rate">6.75%</div>
+        <div class="metric-label">Interest Rate</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val" id="m-loan">$0</div>
+        <div class="metric-label">Loan Amount</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val" id="m-total-interest">$0</div>
+        <div class="metric-label">Total Interest Paid</div>
+      </div>
+    </div>
+
+    <!-- CALCULATOR -->
+    <div class="calc-grid fade-in">
+
+      <!-- INPUT PANEL -->
+      <div class="panel">
+        <div class="panel-label">Inputs</div>
+
+        <div class="field">
+          <label>Home Price <span id="lbl-price">$500,000</span></label>
+          <input type="number" id="home-price" value="500000" min="50000" max="5000000" step="1000" />
+        </div>
+
+        <div class="field">
+          <label>Down Payment <span id="lbl-dp">20% — $100,000</span></label>
+          <div class="range-wrap">
+            <input type="range" id="dp-pct" min="5" max="45" value="20" step="5" />
+            <div class="range-labels">
+              <span>5%</span>
+              <span>25%</span>
+              <span>45%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Credit Score <span id="lbl-rate"></span></label>
+          <select id="credit-score">
+            <option value="760">760–850 (Excellent)</option>
+            <option value="740">740–759 (Very Good)</option>
+            <option value="720" selected>720–739 (Good)</option>
+            <option value="700">700–719 (Fair)</option>
+            <option value="680">680–699 (Below Avg)</option>
+            <option value="660">660–679 (Poor)</option>
+            <option value="640">640–659 (Very Poor)</option>
+            <option value="620">620–639 (Bad)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Loan Term <span id="lbl-term">30 years</span></label>
+          <select id="loan-term">
+            <option value="10">10 years</option>
+            <option value="15">15 years</option>
+            <option value="20">20 years</option>
+            <option value="25">25 years</option>
+            <option value="30" selected>30 years</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>State</label>
+          <select id="state">
+            <option value="">— Select State —</option>
+            <option value="Alabama">Alabama</option>
+            <option value="Alaska">Alaska</option>
+            <option value="Arizona">Arizona</option>
+            <option value="Arkansas">Arkansas</option>
+            <option value="California" selected>California</option>
+            <option value="Colorado">Colorado</option>
+            <option value="Connecticut">Connecticut</option>
+            <option value="Delaware">Delaware</option>
+            <option value="District of Columbia">District of Columbia</option>
+            <option value="Florida">Florida</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Hawaii">Hawaii</option>
+            <option value="Idaho">Idaho</option>
+            <option value="Illinois">Illinois</option>
+            <option value="Indiana">Indiana</option>
+            <option value="Iowa">Iowa</option>
+            <option value="Kansas">Kansas</option>
+            <option value="Kentucky">Kentucky</option>
+            <option value="Louisiana">Louisiana</option>
+            <option value="Maine">Maine</option>
+            <option value="Maryland">Maryland</option>
+            <option value="Massachusetts">Massachusetts</option>
+            <option value="Michigan">Michigan</option>
+            <option value="Minnesota">Minnesota</option>
+            <option value="Mississippi">Mississippi</option>
+            <option value="Missouri">Missouri</option>
+            <option value="Montana">Montana</option>
+            <option value="Nebraska">Nebraska</option>
+            <option value="Nevada">Nevada</option>
+            <option value="New Hampshire">New Hampshire</option>
+            <option value="New Jersey">New Jersey</option>
+            <option value="New Mexico">New Mexico</option>
+            <option value="New York">New York</option>
+            <option value="North Carolina">North Carolina</option>
+            <option value="North Dakota">North Dakota</option>
+            <option value="Ohio">Ohio</option>
+            <option value="Oklahoma">Oklahoma</option>
+            <option value="Oregon">Oregon</option>
+            <option value="Pennsylvania">Pennsylvania</option>
+            <option value="Rhode Island">Rhode Island</option>
+            <option value="South Carolina">South Carolina</option>
+            <option value="South Dakota">South Dakota</option>
+            <option value="Tennessee">Tennessee</option>
+            <option value="Texas">Texas</option>
+            <option value="Utah">Utah</option>
+            <option value="Vermont">Vermont</option>
+            <option value="Virginia">Virginia</option>
+            <option value="Washington">Washington</option>
+            <option value="West Virginia">West Virginia</option>
+            <option value="Wisconsin">Wisconsin</option>
+            <option value="Wyoming">Wyoming</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>HOA Fees</label>
+          <div class="toggle-row">
+            <label>Part of HOA community?</label>
+            <label class="toggle">
+              <input type="checkbox" id="hoa-toggle" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field" id="hoa-amount-field" style="display:none;">
+          <label>Monthly HOA Fee <span id="lbl-hoa">$250</span></label>
+          <input type="range" id="hoa-fee" min="50" max="800" value="250" step="10" />
+          <div class="range-labels"><span>$50</span><span>$425</span><span>$800</span></div>
+        </div>
+
+      </div>
+
+      <!-- RESULTS PANEL -->
+      <div class="results-panel">
+        <div class="panel-label">Monthly Payment</div>
+
+        <div class="total-display">
+          <div class="total-label">Total Monthly Payment</div>
+          <div class="total-amount" id="total-monthly">$—</div>
+          <div class="total-sub" id="total-sub">Principal + Interest + Tax + Insurance</div>
+        </div>
+
+        <div class="breakdown">
+          <div class="breakdown-bar-track" id="breakdown-bar">
+            <div class="bar-seg" id="bar-pi" style="background: var(--accent); opacity:0.8; width:0%"></div>
+            <div class="bar-seg" id="bar-tax" style="background: var(--accent2); opacity:0.8; width:0%"></div>
+            <div class="bar-seg" id="bar-ins" style="background: #a78bfa; opacity:0.8; width:0%"></div>
+            <div class="bar-seg" id="bar-hoa" style="background: #fb923c; opacity:0.8; width:0%"></div>
+          </div>
+          <div class="breakdown-items">
+            <div class="breakdown-item">
+              <div class="breakdown-item-left">
+                <div class="dot" style="background:var(--accent);opacity:0.8"></div>
+                <span class="breakdown-item-name">Principal & Interest</span>
+              </div>
+              <span class="breakdown-item-val" id="bd-pi">—</span>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-item-left">
+                <div class="dot" style="background:var(--accent2);opacity:0.8"></div>
+                <span class="breakdown-item-name">Property Tax</span>
+              </div>
+              <span class="breakdown-item-val" id="bd-tax">—</span>
+            </div>
+            <div class="breakdown-item">
+              <div class="breakdown-item-left">
+                <div class="dot" style="background:#a78bfa;opacity:0.8"></div>
+                <span class="breakdown-item-name">Home Insurance</span>
+              </div>
+              <span class="breakdown-item-val" id="bd-ins">—</span>
+            </div>
+            <div class="breakdown-item" id="hoa-breakdown-row">
+              <div class="breakdown-item-left">
+                <div class="dot" style="background:#fb923c;opacity:0.8"></div>
+                <span class="breakdown-item-name">HOA Fees</span>
+              </div>
+              <span class="breakdown-item-val" id="bd-hoa">$0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- AFFORDABILITY -->
+        <div class="afford-block">
+          <div class="afford-header">
+            <span class="afford-title">Affordability Index</span>
+            <span class="afford-badge green" id="afford-badge">—</span>
+          </div>
+          <div class="afford-meter-track">
+            <div class="afford-meter-fill" id="afford-fill" style="width:0%; background: var(--green);"></div>
+          </div>
+          <div class="afford-sub">
+            <span id="afford-ratio">—</span>
+            <span style="white-space: nowrap;">≤50% Affordable · ≤75% Moderate · &gt;75% High</span>
+          </div>
+          <div class="income-field">
+            <label>Monthly Income $</label>
+            <input type="number" id="monthly-income" placeholder="e.g. 8000" min="0" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- AMORTIZATION -->
+    <div class="amort-section fade-in">
+      <div class="amort-header" onclick="toggleAmort()">
+        <div class="amort-header-left">
+          <span class="amort-title">Loan Amortization Schedule</span>
+        </div>
+        <span class="amort-toggle-btn" id="amort-toggle-txt">Show Table ↓</span>
+      </div>
+      <div class="amort-body" id="amort-body">
+        <div class="amort-chart-wrap">
+          <div class="amort-chart-label">Interest vs. Principal over time</div>
+          <div class="amort-bars" id="amort-bars"></div>
+          <div class="amort-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:var(--accent);opacity:0.7"></div> Principal</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f87171;opacity:0.6"></div> Interest</div>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="amort-table">
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Opening Balance</th>
+                <th>Interest</th>
+                <th>Principal</th>
+                <th>Closing Balance</th>
+              </tr>
+            </thead>
+            <tbody id="amort-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>Openera Mortgage Simulator · Built by Purva Bhatia · purvabhatia.github.io</p>
+  </footer>
+
+  <script>
+    // ── DATA from Excel ──
+    const CREDIT_RATES = {
+      760: 0.065,
+      740: 0.06625,
+      720: 0.0675,
+      700: 0.06875,
+      680: 0.07125,
+      660: 0.07375,
+      640: 0.07625,
+      620: 0.07875,
+    };
+
+    const TAX_RATES = {
+      "Alabama":0.0036,"Alaska":0.0091,"Arizona":0.0044,"Arkansas":0.0053,
+      "California":0.007,"Colorado":0.005,"Connecticut":0.0148,"Delaware":0.005,
+      "District of Columbia":0.0061,"Florida":0.0074,"Georgia":0.0077,
+      "Hawaii":0.0032,"Idaho":0.0048,"Illinois":0.0183,"Indiana":0.0077,
+      "Iowa":0.0123,"Kansas":0.0119,"Kentucky":0.0073,"Louisiana":0.0055,
+      "Maine":0.0094,"Maryland":0.009,"Massachusetts":0.0097,"Michigan":0.0115,
+      "Minnesota":0.0099,"Mississippi":0.0058,"Missouri":0.0088,"Montana":0.006,
+      "Nebraska":0.0143,"Nevada":0.0049,"New Hampshire":0.0141,"New Jersey":0.0177,
+      "New Mexico":0.0061,"New York":0.0126,"North Carolina":0.0062,
+      "North Dakota":0.0094,"Ohio":0.0131,"Oklahoma":0.0077,"Oregon":0.0078,
+      "Pennsylvania":0.0119,"Rhode Island":0.0105,"South Carolina":0.0047,
+      "South Dakota":0.0099,"Tennessee":0.0049,"Texas":0.0136,"Utah":0.0047,
+      "Vermont":0.0142,"Virginia":0.0077,"Washington":0.0075,
+      "West Virginia":0.0048,"Wisconsin":0.0125,"Wyoming":0.0055
+    };
+
+    const INSURANCE = {
+      "Alabama":285,"Alaska":86,"Arizona":214,"Arkansas":268,"California":111,
+      "Colorado":348,"Connecticut":156,"Delaware":85,"District of Columbia":108,
+      "Florida":219,"Georgia":203,"Hawaii":51,"Idaho":122,"Illinois":202,
+      "Indiana":208,"Iowa":209,"Kansas":311,"Kentucky":209,"Louisiana":185,
+      "Maine":98,"Maryland":162,"Massachusetts":133,"Michigan":175,
+      "Minnesota":243,"Mississippi":276,"Missouri":274,"Montana":228,
+      "Nebraska":375,"Nevada":109,"New Hampshire":99,"New Jersey":108,
+      "New Mexico":144,"New York":145,"North Carolina":208,"North Dakota":234,
+      "Ohio":133,"Oklahoma":518,"Oregon":109,"Pennsylvania":120,
+      "Rhode Island":173,"South Carolina":196,"South Dakota":279,
+      "Tennessee":238,"Texas":382,"Utah":115,"Vermont":79,"Virginia":142,
+      "Washington":118,"West Virginia":148,"Wisconsin":126,"Wyoming":130
+    };
+
+    function fmt(n) {
+      return '$' + Math.round(n).toLocaleString();
+    }
+
+    function fmtK(n) {
+      if (n >= 1000000) return '$' + (n/1000000).toFixed(2) + 'M';
+      if (n >= 1000) return '$' + Math.round(n/1000) + 'K';
+      return fmt(n);
+    }
+
+    function pmt(rate, nper, pv) {
+      if (rate === 0) return pv / nper;
+      return (rate * pv) / (1 - Math.pow(1 + rate, -nper));
+    }
+
+    function calculate() {
+      const homePrice = parseFloat(document.getElementById('home-price').value) || 0;
+      const dpPct = parseFloat(document.getElementById('dp-pct').value) / 100;
+      const creditScore = parseInt(document.getElementById('credit-score').value);
+      const loanTerm = parseInt(document.getElementById('loan-term').value);
+      const state = document.getElementById('state').value;
+      const hoaActive = document.getElementById('hoa-toggle').checked;
+      const hoaFee = hoaActive ? parseFloat(document.getElementById('hoa-fee').value) : 0;
+      const monthlyIncome = parseFloat(document.getElementById('monthly-income').value) || 0;
+
+      const dp = homePrice * dpPct;
+      const loanAmt = homePrice - dp;
+      const annualRate = CREDIT_RATES[creditScore] || 0.0675;
+      const monthlyRate = annualRate / 12;
+      const nMonths = loanTerm * 12;
+
+      const piMonthly = loanAmt > 0 ? pmt(monthlyRate, nMonths, loanAmt) : 0;
+      const taxMonthly = state ? (TAX_RATES[state] || 0) * homePrice / 12 : 0;
+      const insMonthly = state ? (INSURANCE[state] || 176) : 176;
+      const totalMonthly = piMonthly + taxMonthly + insMonthly + hoaFee;
+
+      const totalInterest = piMonthly * nMonths - loanAmt;
+
+      // Update UI labels
+      document.getElementById('lbl-price').textContent = fmt(homePrice);
+      document.getElementById('lbl-dp').textContent = `${Math.round(dpPct*100)}% — ${fmt(dp)}`;
+      document.getElementById('lbl-term').textContent = `${loanTerm} years`;
+      document.getElementById('lbl-rate').textContent = (annualRate * 100).toFixed(3) + '%';
+      if (hoaActive) document.getElementById('lbl-hoa').textContent = fmt(hoaFee);
+
+      // Metrics
+      document.getElementById('m-rate').textContent = (annualRate * 100).toFixed(3) + '%';
+      document.getElementById('m-loan').textContent = fmtK(loanAmt);
+      document.getElementById('m-total-interest').textContent = fmtK(Math.max(0, totalInterest));
+
+      // Breakdown
+      document.getElementById('total-monthly').textContent = fmt(totalMonthly);
+
+      const pctPI = totalMonthly > 0 ? (piMonthly / totalMonthly * 100) : 0;
+      const pctTax = totalMonthly > 0 ? (taxMonthly / totalMonthly * 100) : 0;
+      const pctIns = totalMonthly > 0 ? (insMonthly / totalMonthly * 100) : 0;
+      const pctHOA = totalMonthly > 0 ? (hoaFee / totalMonthly * 100) : 0;
+
+      document.getElementById('bar-pi').style.width = pctPI + '%';
+      document.getElementById('bar-tax').style.width = pctTax + '%';
+      document.getElementById('bar-ins').style.width = pctIns + '%';
+      document.getElementById('bar-hoa').style.width = pctHOA + '%';
+
+      document.getElementById('bd-pi').textContent = fmt(piMonthly);
+      document.getElementById('bd-tax').textContent = fmt(taxMonthly);
+      document.getElementById('bd-ins').textContent = fmt(insMonthly);
+      document.getElementById('bd-hoa').textContent = fmt(hoaFee);
+
+      // Affordability
+      if (monthlyIncome > 0) {
+        const ratio = totalMonthly / monthlyIncome;
+        const pct = Math.min(ratio * 100, 100);
+        const fill = document.getElementById('afford-fill');
+        const badge = document.getElementById('afford-badge');
+        fill.style.width = pct + '%';
+        document.getElementById('afford-ratio').textContent = (ratio * 100).toFixed(1) + '% of income';
+        if (ratio < 0.5) {
+          fill.style.background = 'var(--green)';
+          badge.className = 'afford-badge green';
+          badge.textContent = 'Affordable';
+        } else if (ratio < 0.75) {
+          fill.style.background = 'var(--yellow)';
+          badge.className = 'afford-badge yellow';
+          badge.textContent = 'Moderate';
+        } else {
+          fill.style.background = 'var(--red)';
+          badge.className = 'afford-badge red';
+          badge.textContent = 'High Burden';
+        }
+      } else {
+        document.getElementById('afford-fill').style.width = '0%';
+        document.getElementById('afford-ratio').textContent = 'Enter income below';
+        document.getElementById('afford-badge').textContent = '—';
+        document.getElementById('afford-badge').className = 'afford-badge';
+      }
+
+      // Amortization
+      buildAmort(loanAmt, monthlyRate, nMonths, piMonthly, loanTerm);
+    }
+
+    function buildAmort(loanAmt, monthlyRate, nMonths, piMonthly, years) {
+      const tbody = document.getElementById('amort-tbody');
+      tbody.innerHTML = '';
+      const barsEl = document.getElementById('amort-bars');
+      barsEl.innerHTML = '';
+
+      let balance = loanAmt;
+      let maxInterest = 0;
+      const yearData = [];
+
+      for (let y = 1; y <= years; y++) {
+        const opening = balance;
+        let yearInterest = 0, yearPrincipal = 0;
+        for (let m = 0; m < 12; m++) {
+          const interest = balance * monthlyRate;
+          const principal = piMonthly - interest;
+          yearInterest += interest;
+          yearPrincipal += principal;
+          balance = Math.max(0, balance - principal);
+        }
+        const closing = Math.max(0, balance);
+        yearData.push({ y, opening, yearInterest, yearPrincipal, closing });
+        maxInterest = Math.max(maxInterest, yearInterest + yearPrincipal);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>Yr ${y}</td>
+          <td>${fmt(opening)}</td>
+          <td>${fmt(yearInterest)}</td>
+          <td>${fmt(yearPrincipal)}</td>
+          <td>${fmt(closing)}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+
+      // Build visual bars
+      yearData.forEach(d => {
+        const total = d.yearInterest + d.yearPrincipal;
+        const intH = maxInterest > 0 ? (d.yearInterest / maxInterest) * 70 : 0;
+        const prinH = maxInterest > 0 ? (d.yearPrincipal / maxInterest) * 70 : 0;
+        const group = document.createElement('div');
+        group.className = 'amort-bar-group';
+        group.title = `Year ${d.y}: Interest ${fmt(d.yearInterest)} | Principal ${fmt(d.yearPrincipal)}`;
+        group.innerHTML = `
+          <div class="amort-bar-interest" style="height:${intH}px"></div>
+          <div class="amort-bar-principal" style="height:${prinH}px"></div>
+        `;
+        barsEl.appendChild(group);
+      });
+    }
+
+    function toggleAmort() {
+      const body = document.getElementById('amort-body');
+      const txt = document.getElementById('amort-toggle-txt');
+      if (body.classList.contains('open')) {
+        body.classList.remove('open');
+        txt.textContent = 'Show Table ↓';
+      } else {
+        body.classList.add('open');
+        txt.textContent = 'Hide Table ↑';
+      }
+    }
+
+    // Events
+    document.getElementById('home-price').addEventListener('input', calculate);
+    document.getElementById('dp-pct').addEventListener('input', calculate);
+    document.getElementById('credit-score').addEventListener('change', calculate);
+    document.getElementById('loan-term').addEventListener('change', calculate);
+    document.getElementById('state').addEventListener('change', calculate);
+    document.getElementById('monthly-income').addEventListener('input', calculate);
+    document.getElementById('hoa-toggle').addEventListener('change', function() {
+      document.getElementById('hoa-amount-field').style.display = this.checked ? 'block' : 'none';
+      calculate();
+    });
+    document.getElementById('hoa-fee').addEventListener('input', calculate);
+
+    // Init
+    calculate();
+  </script>
+</body>
+</html>
