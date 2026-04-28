@@ -7,6 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <meta property="og:title" content="Purva Bhatia | Financial Analytics">
+  <meta property="og:description" content="FMVA® certified analyst — valuation models, credit underwriting, and financial planning. MS Financial Analytics at SJSU.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://purvabhatia.github.io/">
+  <meta property="og:image" content="https://purvabhatia.github.io/assets/PurvaBhatia_Headshot.jpg">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230d0f14'/><text x='50' y='68' font-family='serif' font-size='48' font-weight='400' fill='%23c8f064' text-anchor='middle'>PB</text></svg>">
   <style>
     .nav-links {
@@ -425,6 +430,31 @@
       border-radius: 2px;
     }
 
+    .project-badge {
+      font-family: var(--mono-font);
+      font-size: 0.65rem;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 0.2rem 0.55rem;
+      border-radius: 2px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .project-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+      flex-wrap: nowrap;
+    }
+
+    .project-actions .btn {
+      font-size: 0.78rem;
+      padding: 0.55rem 1.1rem;
+      white-space: nowrap;
+    }
+
     /* ── CONTACT ── */
     .contact-inner {
       background: var(--surface);
@@ -678,7 +708,7 @@
             <span class="skill-tag">SQL</span>
             <span class="skill-tag">Power BI</span>
             <span class="skill-tag">FactSet</span>
-            <span class="skill-tag">Generative AI</span>
+            <span class="skill-tag">AI-Assisted Modeling &amp; Research</span>
           </div>
         </div>
         <div class="skills-group">
@@ -836,10 +866,10 @@
       </div>
 
       <!-- PROJECT 3 -->
-      <a class="project-card" href="mortgage.html">
+      <div class="project-card">
         <div class="project-top">
           <span class="project-icon">🏠</span>
-          <span class="project-arrow">↗</span>
+          <span class="project-badge">Live Demo</span>
         </div>
         <div class="project-title">Revenue Model & Mortgage Calculator — Openera</div>
         <div class="project-desc">
@@ -850,7 +880,11 @@
           <span class="project-tag">Revenue Modeling</span>
           <span class="project-tag">Startup Finance</span>
         </div>
-      </a>
+        <div class="project-actions">
+          <a href="mortgage.html" class="btn btn-primary" target="_blank">Live Demo ↗</a>
+          <a href="assets/Simulator.xlsx" class="btn btn-outline" target="_blank">Download Excel ↓</a>
+        </div>
+      </div>
 
       <!-- PROJECT 4 -->
       <div class="project-card">
