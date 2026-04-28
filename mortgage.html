@@ -6,80 +6,13 @@
   <title>Mortgage Calculator — Openera | Purva Bhatia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230d0f14'/><text x='50' y='68' font-family='serif' font-size='48' font-weight='400' fill='%23c8f064' text-anchor='middle'>PB</text></svg>">
   <style>
     :root {
-      --bg: #0d0f14;
-      --surface: #13161d;
-      --surface2: #1a1e28;
-      --border: rgba(255,255,255,0.07);
-      --accent: #c8f064;
-      --accent2: #64d4f0;
-      --text: #e8eaf0;
-      --muted: #7a8090;
-      --heading-font: 'DM Serif Display', serif;
-      --body-font: 'DM Sans', sans-serif;
-      --mono-font: 'DM Mono', monospace;
       --green: #4ade80;
       --yellow: #facc15;
       --red: #f87171;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--body-font);
-      font-size: 16px;
-      line-height: 1.7;
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.5;
-    }
-
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(200,240,100,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(200,240,100,0.03) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 4rem;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      background: rgba(13,15,20,0.85);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-logo {
-      font-family: var(--mono-font);
-      font-size: 0.85rem;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      text-decoration: none;
     }
 
     .nav-back {
@@ -732,17 +665,6 @@
       border: 1px solid rgba(100,212,240,0.2);
       padding: 0.2rem 0.5rem;
       border-radius: 2px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem 4rem;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 0.8rem;
-      font-family: var(--mono-font);
-      position: relative;
-      z-index: 1;
     }
 
     @media (max-width: 900px) {
