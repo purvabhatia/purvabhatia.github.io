@@ -3,7 +3,10 @@
     "allow": [
       "Bash(python -c \"import openpyxl; print\\('openpyxl:', openpyxl.__version__\\)\")",
       "Bash(python _inspect_xlsx.py)",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(cat)",
+      "Bash(python _3m_inspect.py)",
+      "PowerShell(cd 'F:\\\\Purva\\\\purvabhatia.github.io'; \\(Get-Content _3m_dump.txt | Measure-Object -Line\\).Lines)"
     ]
   }
 }
