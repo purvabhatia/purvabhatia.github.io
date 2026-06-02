@@ -397,6 +397,26 @@
       color: var(--muted);
       font-size: 0.92rem;
       font-weight: 300;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .timeline-desc li {
+      padding-left: 1.3rem;
+      position: relative;
+      margin-bottom: 0.5rem;
+      line-height: 1.55;
+    }
+
+    .timeline-desc li:last-child { margin-bottom: 0; }
+
+    .timeline-desc li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.8rem;
     }
 
     /* ── PROJECTS ── */
@@ -456,6 +476,37 @@
       font-weight: 300;
       margin-bottom: 1.25rem;
       line-height: 1.6;
+    }
+
+    .project-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .pstat-num {
+      font-family: var(--heading-font);
+      font-size: 1.6rem;
+      line-height: 1;
+      color: var(--accent);
+    }
+
+    .pstat-num.down { color: #f87171; }
+    .pstat-num.up   { color: #4ade80; }
+
+    .pstat-label {
+      font-family: var(--mono-font);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+
+    .timeline-desc strong {
+      color: var(--text);
+      font-weight: 500;
     }
 
     .project-tags {
@@ -843,7 +894,7 @@
           </div>
           <div class="edu-meta">
             <span class="timeline-date">March 2023</span>
-            <div class="edu-gpa">GPA 3.33 · Dean's List</div>
+            <div class="edu-gpa">Dean's List</div>
           </div>
         </div>
         <div class="edu-section-title">Coursework</div>
@@ -867,9 +918,13 @@
           <span class="timeline-date">Apr 2023 – July 2024</span>
         </div>
         <div class="timeline-company">ICICI Bank · Mumbai, India</div>
-        <p class="timeline-desc">
-          Secured credit approvals exceeding USD 11.0 million by conducting financial statement analysis and modeling with 97% accuracy for an A-rated airports sector corporation. Led end-to-end analysis of business groups comprising 5+ companies — covering group-level debt, EBITDA margins, and banking exposure. Conducted sectoral analysis and competitive benchmarking; monitored financial performance against projections and identified key variance drivers in revenue, margins, and leverage ratios.
-        </p>
+        <ul class="timeline-desc">
+          <li>Secured credit approvals exceeding <strong>$11.0 million</strong> by conducting financial statement analysis and modeling with <strong>97% accuracy</strong> and authoring high-quality credit notes for an A-rated aviation sector corporation</li>
+          <li>Spearheaded preparation of credit committee presentations for large corporate group evaluations</li>
+          <li>Led end-to-end analysis of business groups comprising <strong>5+ companies</strong>, including group-level debt, EBITDA margins, upcoming projects, and banking exposure</li>
+          <li>Conducted sectoral analysis and competitive benchmarking, comparing group entities against industry peers to support credit decision-making</li>
+          <li>Monitored financial performance against projections and identified key drivers of variances in revenue, margins, and leverage ratios</li>
+        </ul>
       </div>
       <!-- JOB 2 -->
       <div class="timeline-item">
@@ -878,9 +933,10 @@
           <span class="timeline-date">Apr 2022 – May 2022</span>
         </div>
         <div class="timeline-company">SMC Global Securities Limited</div>
-        <p class="timeline-desc">
-          Performed comparative analysis of mutual funds across 2 AMCs with combined AUM of USD 1.3 billion. Synthesized survey responses from 150+ participants into actionable insights for the equity advisory team.
-        </p>
+        <ul class="timeline-desc">
+          <li>Performed comparative analysis of mutual funds of 2 AMCs with AUM of <strong>$1.3 billion</strong></li>
+          <li>Synthesized survey responses from <strong>150+ participants</strong> into insights for equity advisory team</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -893,11 +949,11 @@
 
       <!-- PROJECT 1 -->
       <div class="project-card">
-        <div class="project-top">
-          <span class="project-icon">🔬</span>
-          <span class="project-badge">Live Demo</span>
+        <div class="project-title">DCF Valuation Model: 3M</div>
+        <div class="project-stats">
+          <div class="pstat"><div class="pstat-num">$135.67</div><div class="pstat-label">Intrinsic Value</div></div>
+          <div class="pstat"><div class="pstat-num down">▼ 10%</div><div class="pstat-label">vs. Market</div></div>
         </div>
-        <div class="project-title">DCF Valuation Model: 3M (MMM)</div>
         <div class="project-desc">
           Built an equity-research DCF for 3M Company on a post-Solventum-spinoff basis: segment revenue forecast, CAPM beta regression, bond-level WACC across USD/EUR tranches, and explicit present-value modeling of the PFAS and Combat Arms litigation settlements. NOPAT / invested-capital method with a WACC × terminal-growth sensitivity.
         </div>
@@ -916,11 +972,11 @@
 
       <!-- PROJECT 2 -->
       <div class="project-card">
-        <div class="project-top">
-          <span class="project-icon">🏠</span>
-          <span class="project-badge">Live Demo</span>
+        <div class="project-title">Mortgage Calculator: Openera</div>
+        <div class="project-stats">
+          <div class="pstat"><div class="pstat-num">50+</div><div class="pstat-label">States + DC</div></div>
+          <div class="pstat"><div class="pstat-num">FICO</div><div class="pstat-label">Banded Rates</div></div>
         </div>
-        <div class="project-title">Revenue Model & Mortgage Calculator: Openera</div>
         <div class="project-desc">
           Built a revenue model and mortgage affordability calculator in Excel for a startup (Openera), enabling data-driven financial planning and customer-facing affordability analysis.
         </div>
@@ -937,11 +993,11 @@
 
       <!-- PROJECT 3 -->
       <div class="project-card">
-        <div class="project-top">
-          <span class="project-icon">⚡</span>
-          <span class="project-badge">Live Demo</span>
-        </div>
         <div class="project-title">Real-Time Stock Dashboard</div>
+        <div class="project-stats">
+          <div class="pstat"><div class="pstat-num">100</div><div class="pstat-label">Trading Days</div></div>
+          <div class="pstat"><div class="pstat-num up">Live ↗</div><div class="pstat-label">Tableau Public</div></div>
+        </div>
         <div class="project-desc">
           Built an interactive dashboard tracking NVIDIA (NVDA) daily price and volume in Tableau, fed by a Python + Alpha Vantage data pipeline. Surfaces current price, day-over-day change, period high/low, and the price trend.
         </div>
@@ -957,11 +1013,11 @@
 
       <!-- PROJECT 4 -->
       <div class="project-card">
-        <div class="project-top">
-          <span class="project-icon">📈</span>
-          <span class="project-badge">Live Demo</span>
-        </div>
         <div class="project-title">DCF Valuation Model: Costco</div>
+        <div class="project-stats">
+          <div class="pstat"><div class="pstat-num">$301.86</div><div class="pstat-label">Intrinsic Value</div></div>
+          <div class="pstat"><div class="pstat-num down">▼ 70%</div><div class="pstat-label">vs. Market</div></div>
+        </div>
         <div class="project-desc">
           Led a 5-member team to build a full Discounted Cash Flow valuation model for Costco, projecting revenue, operating expenses, CAPEX, and free cash flows. Conducted sensitivity and scenario analysis on key revenue and margin drivers.
         </div>
@@ -979,9 +1035,24 @@
 
       <!-- PROJECT 5 -->
       <div class="project-card">
-        <div class="project-top">
-          <span class="project-icon">📊</span>
+        <div class="project-title">FP&amp;A Reporting Automation: SQL</div>
+        <div class="project-stats">
+          <div class="pstat"><div class="pstat-num">$50M</div><div class="pstat-label">Client ARR</div></div>
+          <div class="pstat"><div class="pstat-num">100%</div><div class="pstat-label">Logic Consistency</div></div>
         </div>
+        <div class="project-desc">
+          Re-architected FP&amp;A reporting for a SaaS company on a scalable PostgreSQL database, engineering complex SQL — window functions and CTEs — to automate variance analysis and trend detection.
+        </div>
+        <div class="project-tags">
+          <span class="project-tag">SQL</span>
+          <span class="project-tag">PostgreSQL</span>
+          <span class="project-tag">FP&amp;A</span>
+          <span class="project-tag">Automation</span>
+        </div>
+      </div>
+
+      <!-- PROJECT 6 -->
+      <div class="project-card">
         <div class="project-title">Financial Metrics Dashboard</div>
         <div class="project-desc">
           Developed Excel dashboards to track key financial metrics and support forecasting decisions. Built dynamic models incorporating sensitivity analysis on revenue and margin assumptions.
