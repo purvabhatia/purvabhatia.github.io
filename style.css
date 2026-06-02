@@ -1,14 +1,14 @@
 :root {
-  --bg: #0d0f14;
-  --surface: #13161d;
-  --surface2: #1a1e28;
-  --border: rgba(255,255,255,0.07);
-  --accent: #c8f064;
-  --accent2: #64d4f0;
-  --text: #e8eaf0;
-  --muted: #7a8090;
-  --heading-font: 'DM Serif Display', serif;
-  --body-font: 'DM Sans', sans-serif;
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --surface2: #f1f5f9;
+  --border: #e2e8f0;
+  --accent: #1c398e;
+  --accent2: #1447e6;
+  --text: #0f172b;
+  --muted: #64748b;
+  --heading-font: 'Inter', sans-serif;
+  --body-font: 'Inter', sans-serif;
   --mono-font: 'DM Mono', monospace;
 }
 
@@ -24,25 +24,19 @@ body {
   line-height: 1.7;
   overflow-x: hidden;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.5;
-}
-
+/* Subtle slate grid for a light, analytical texture.
+   (The dark-theme noise grain was removed — it reads as grey dust on white.) */
 body::after {
   content: '';
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(200,240,100,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(200,240,100,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(15,23,43,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15,23,43,0.025) 1px, transparent 1px);
   background-size: 60px 60px;
   pointer-events: none;
   z-index: 0;
@@ -58,8 +52,9 @@ nav {
   padding: 1.2rem 4rem;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  background: rgba(13,15,20,0.8);
+  background: rgba(255,255,255,0.85);
   border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(15,23,43,0.04);
 }
 
 .nav-logo {

@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Purva Bhatia | Financial Analytics</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <meta property="og:title" content="Purva Bhatia | Financial Analytics">
   <meta property="og:description" content="FMVA® certified analyst — valuation models, credit underwriting, and financial planning. MS Financial Analytics at SJSU.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://purvabhatia.github.io/">
   <meta property="og:image" content="https://purvabhatia.github.io/assets/PurvaBhatia_Headshot.jpg">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230d0f14'/><text x='50' y='68' font-family='serif' font-size='48' font-weight='400' fill='%23c8f064' text-anchor='middle'>PB</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%231c398e'/><text x='50' y='68' font-family='sans-serif' font-size='46' font-weight='700' fill='%23ffffff' text-anchor='middle'>PB</text></svg>">
   <style>
     .nav-links {
       display: flex;
@@ -112,8 +113,9 @@
     h1 {
       font-family: var(--heading-font);
       font-size: clamp(2.25rem, 4.8vw, 3.5rem);
-      line-height: 1.15;
-      font-weight: 400;
+      line-height: 1.12;
+      font-weight: 800;
+      letter-spacing: -0.02em;
       margin-bottom: 1.5rem;
     }
 
@@ -154,13 +156,13 @@
 
     .btn-primary {
       background: var(--accent);
-      color: #0d0f14;
+      color: #ffffff;
     }
 
     .btn-primary:hover {
-      background: #d8ff70;
+      background: #1447e6;
       transform: translateY(-1px);
-      box-shadow: 0 8px 24px rgba(200,240,100,0.2);
+      box-shadow: 0 8px 24px rgba(28,57,142,0.25);
     }
 
     .btn-outline {
@@ -170,7 +172,7 @@
     }
 
     .btn-outline:hover {
-      border-color: rgba(255,255,255,0.2);
+      border-color: var(--accent);
       background: var(--surface);
     }
 
@@ -181,7 +183,7 @@
       right: -10%;
       width: 600px;
       height: 600px;
-      background: radial-gradient(circle, rgba(200,240,100,0.06) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(28,57,142,0.07) 0%, transparent 70%);
       pointer-events: none;
       z-index: 0;
     }
@@ -207,7 +209,8 @@
     h2 {
       font-family: var(--heading-font);
       font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 400;
+      font-weight: 700;
+      letter-spacing: -0.02em;
       margin-bottom: 3rem;
       line-height: 1.15;
     }
@@ -309,6 +312,7 @@
     .stat-number {
       font-family: var(--heading-font);
       font-size: 2.2rem;
+      font-weight: 700;
       color: var(--accent);
       line-height: 1;
       margin-bottom: 0.25rem;
@@ -383,7 +387,7 @@
       font-size: 0.75rem;
       color: var(--accent);
       padding: 0.2rem 0.6rem;
-      border: 1px solid rgba(200,240,100,0.2);
+      border: 1px solid rgba(28,57,142,0.2);
       border-radius: 2px;
     }
 
@@ -488,12 +492,13 @@
     .pstat-num {
       font-family: var(--heading-font);
       font-size: 1.6rem;
+      font-weight: 700;
       line-height: 1;
       color: var(--accent);
     }
 
-    .pstat-num.down { color: #f87171; }
-    .pstat-num.up   { color: #4ade80; }
+    .pstat-num.down { color: #dc2626; }
+    .pstat-num.up   { color: #059669; }
 
     .pstat-label {
       font-family: var(--mono-font);
@@ -519,7 +524,8 @@
       font-family: var(--mono-font);
       font-size: 0.7rem;
       color: var(--accent2);
-      border: 1px solid rgba(100,212,240,0.2);
+      background: #eff6ff;
+      border: 1px solid rgba(20,71,230,0.2);
       padding: 0.15rem 0.5rem;
       border-radius: 2px;
     }

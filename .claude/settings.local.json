@@ -11,7 +11,12 @@
       "PowerShell(python F:\\\\Purva\\\\purvabhatia.github.io\\\\_audit_tmp.py)",
       "PowerShell(Remove-Item *)",
       "PowerShell(python F:\\\\Purva\\\\purvabhatia.github.io\\\\_audit_recon.py)",
-      "WebFetch(domain:public.tableau.com)"
+      "WebFetch(domain:public.tableau.com)",
+      "PowerShell(gh *)",
+      "PowerShell(python find_portfolios.py)",
+      "PowerShell(python find_portfolios.py --finance)",
+      "PowerShell(python inspect_site.py https://aurokrishnaa.me/)",
+      "WebFetch(domain:aurokrishnaa.me)"
     ]
   }
 }

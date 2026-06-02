@@ -5,23 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>3M DCF Valuation — Equity Research Model | Purva Bhatia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <meta property="og:title" content="3M DCF Valuation — Equity Research Model | Purva Bhatia">
   <meta property="og:description" content="A complete DCF valuation of 3M Company (MMM) — segment revenue forecast, CAPM beta regression, bond-level WACC, explicit PFAS & Combat Arms litigation modeling, NOPAT DCF, and WACC × terminal-growth sensitivity.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://purvabhatia.github.io/3m.html">
   <meta property="og:image" content="https://purvabhatia.github.io/assets/PurvaBhatia_Headshot.jpg">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230d0f14'/><text x='50' y='68' font-family='serif' font-size='48' font-weight='400' fill='%23c8f064' text-anchor='middle'>PB</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%231c398e'/><text x='50' y='68' font-family='sans-serif' font-size='46' font-weight='700' fill='%23ffffff' text-anchor='middle'>PB</text></svg>">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --green: #4ade80;
-      --yellow: #facc15;
-      --red: #f87171;
-      --bull: #c8f064;
-      --base: #64d4f0;
-      --bear: #f87171;
+      --green: #059669;
+      --yellow: #d97706;
+      --red: #dc2626;
+      --bull: #059669;
+      --base: #1447e6;
+      --bear: #dc2626;
     }
 
     .nav-back {
@@ -61,7 +62,8 @@
     .page-header h1 {
       font-family: var(--heading-font);
       font-size: clamp(2.2rem, 5vw, 3.8rem);
-      font-weight: 400;
+      font-weight: 800;
+      letter-spacing: -0.02em;
       line-height: 1.1;
       margin-bottom: 1.25rem;
     }
@@ -86,7 +88,7 @@
       max-width: 720px;
       padding: 0.7rem 0.95rem;
       margin-bottom: 1.5rem;
-      background: rgba(250, 204, 21, 0.06);
+      background: rgba(217, 119, 6, 0.08);
       border-left: 2px solid var(--yellow);
       border-radius: 0 2px 2px 0;
       font-family: var(--mono-font);
@@ -102,7 +104,7 @@
       border-radius: 50%;
       background: var(--yellow);
       margin-top: 0.45rem;
-      box-shadow: 0 0 8px rgba(250, 204, 21, 0.5);
+      box-shadow: 0 0 8px rgba(217, 119, 6, 0.4);
     }
     .btn {
       display: inline-flex;
@@ -135,7 +137,7 @@
       position: absolute;
       top: 0; right: -10%;
       width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(200,240,100,0.06) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(28,57,142,0.07) 0%, transparent 70%);
       pointer-events: none;
     }
 
@@ -174,6 +176,7 @@
     .kpi-val {
       font-family: var(--heading-font);
       font-size: 2rem;
+      font-weight: 700;
       color: var(--text);
       line-height: 1.1;
     }
@@ -200,7 +203,8 @@
     .section-title {
       font-family: var(--heading-font);
       font-size: clamp(1.5rem, 3vw, 2.2rem);
-      font-weight: 400;
+      font-weight: 700;
+      letter-spacing: -0.02em;
       margin-bottom: 1rem;
       line-height: 1.15;
     }
@@ -279,7 +283,7 @@
     .data-table td {
       padding: 0.6rem 0.85rem;
       text-align: right;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(15,23,43,0.06);
       color: var(--text);
     }
     .data-table td:first-child {
@@ -290,14 +294,14 @@
     }
     .data-table tr.subtotal td {
       border-top: 1px solid var(--border);
-      background: rgba(200,240,100,0.03);
+      background: rgba(28,57,142,0.04);
       color: var(--text);
       font-weight: 500;
     }
     .data-table tr.subtotal td:first-child { color: var(--accent); }
     .data-table tr.total td {
       border-top: 1px solid var(--accent);
-      background: rgba(200,240,100,0.06);
+      background: rgba(28,57,142,0.06);
       color: var(--accent);
       font-weight: 500;
     }
@@ -334,7 +338,7 @@
     .heatmap th, .heatmap td {
       padding: 0.6rem 0.5rem;
       text-align: center;
-      border: 1px solid rgba(255,255,255,0.04);
+      border: 1px solid rgba(15,23,43,0.06);
     }
     .heatmap th {
       color: var(--muted);
@@ -371,9 +375,9 @@
       height: 6px;
       border-radius: 3px;
       background: linear-gradient(90deg,
-        rgba(248,113,113,0.6) 0%,
-        rgba(250,204,21,0.6) 50%,
-        rgba(74,222,128,0.6) 100%);
+        rgba(220,38,38,0.65) 0%,
+        rgba(217,119,6,0.65) 50%,
+        rgba(5,150,105,0.65) 100%);
     }
 
     /* KEY STAT INLINE */
@@ -387,6 +391,7 @@
     .stat-inline .v {
       font-family: var(--heading-font);
       font-size: 1.6rem;
+      font-weight: 700;
       color: var(--accent);
       line-height: 1;
     }
@@ -424,6 +429,7 @@
     .scenario .v {
       font-family: var(--heading-font);
       font-size: 1.8rem;
+      font-weight: 700;
       line-height: 1.1;
       margin-bottom: 0.35rem;
     }
@@ -439,7 +445,7 @@
 
     /* RECOMMENDATION PANEL */
     .reco-panel {
-      background: linear-gradient(135deg, rgba(200,240,100,0.05), rgba(100,212,240,0.05));
+      background: linear-gradient(135deg, rgba(28,57,142,0.05), rgba(20,71,230,0.05));
       border: 1px solid var(--border);
       border-radius: 4px;
       padding: 2.5rem;
@@ -458,7 +464,8 @@
       font-size: clamp(1.8rem, 4vw, 2.6rem);
       line-height: 1.15;
       margin-bottom: 1.25rem;
-      font-weight: 400;
+      font-weight: 700;
+      letter-spacing: -0.02em;
     }
     .reco-h em { color: var(--yellow); font-style: italic; }
     .reco-bullet-list {
@@ -529,7 +536,8 @@
       font-family: var(--mono-font);
       font-size: 0.68rem;
       color: var(--accent2);
-      border: 1px solid rgba(100,212,240,0.2);
+      background: #eff6ff;
+      border: 1px solid rgba(20,71,230,0.2);
       padding: 0.2rem 0.55rem;
       border-radius: 2px;
     }
@@ -1026,10 +1034,10 @@
     const maxV = Math.max(...allVals);
     function heatColor(v) {
       const t = Math.max(0, Math.min(1, (v - minV) / (maxV - minV)));
-      const r = Math.round(248 + (74  - 248) * t);
-      const g = Math.round(113 + (222 - 113) * t);
-      const b = Math.round(113 + (128 - 113) * t);
-      return `rgba(${r},${g},${b},${0.15 + t*0.35})`;
+      const r = Math.round(220 + (5   - 220) * t);
+      const g = Math.round(38  + (150 - 38)  * t);
+      const b = Math.round(38  + (105 - 38)  * t);
+      return `rgba(${r},${g},${b},${0.18 + t*0.38})`;
     }
     SENS.iv.forEach((row, i) => {
       const tr = document.createElement('tr');
@@ -1046,13 +1054,13 @@
     });
 
     // ── CHART DEFAULTS ──
-    Chart.defaults.font.family = "'DM Sans', sans-serif";
+    Chart.defaults.font.family = "'Inter', sans-serif";
     Chart.defaults.font.size = 11;
-    Chart.defaults.color = '#7a8090';
-    Chart.defaults.borderColor = 'rgba(255,255,255,0.06)';
+    Chart.defaults.color = '#64748b';
+    Chart.defaults.borderColor = 'rgba(15,23,43,0.08)';
     const gridOpt = {
-      x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a8090' } },
-      y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#7a8090' } }
+      x: { grid: { color: 'rgba(15,23,43,0.06)' }, ticks: { color: '#64748b' } },
+      y: { grid: { color: 'rgba(15,23,43,0.06)' }, ticks: { color: '#64748b' } }
     };
 
     // ── CHART 1: Segment revenue stacked ──
@@ -1061,9 +1069,9 @@
       data: {
         labels: SEG_YEARS,
         datasets: [
-          { label: 'Safety & Industrial', data: SEG_SI, backgroundColor: 'rgba(200,240,100,0.8)' },
-          { label: 'Transportation & Electronics', data: SEG_TE, backgroundColor: 'rgba(100,212,240,0.8)' },
-          { label: 'Consumer', data: SEG_CONS, backgroundColor: 'rgba(250,204,21,0.75)' },
+          { label: 'Safety & Industrial', data: SEG_SI, backgroundColor: 'rgba(28,57,142,0.85)' },
+          { label: 'Transportation & Electronics', data: SEG_TE, backgroundColor: 'rgba(5,150,105,0.75)' },
+          { label: 'Consumer', data: SEG_CONS, backgroundColor: 'rgba(217,119,6,0.75)' },
         ]
       },
       options: {
@@ -1074,7 +1082,7 @@
         },
         scales: {
           x: { ...gridOpt.x, stacked: true },
-          y: { ...gridOpt.y, stacked: true, ticks: { color: '#7a8090', callback: v => '$' + (v/1000).toFixed(0) + 'B' } }
+          y: { ...gridOpt.y, stacked: true, ticks: { color: '#64748b', callback: v => '$' + (v/1000).toFixed(0) + 'B' } }
         }
       }
     });
@@ -1085,9 +1093,9 @@
         labels: REV_NI_YEARS,
         datasets: [
           { type: 'bar', label: 'Net Income', data: NI_HIST,
-            backgroundColor: NI_HIST.map(v => v < 0 ? 'rgba(248,113,113,0.7)' : 'rgba(200,240,100,0.6)'), yAxisID: 'y2', order: 2 },
+            backgroundColor: NI_HIST.map(v => v < 0 ? 'rgba(220,38,38,0.7)' : 'rgba(5,150,105,0.6)'), yAxisID: 'y2', order: 2 },
           { type: 'line', label: 'Total Revenue', data: REVENUE_HIST,
-            borderColor: '#64d4f0', backgroundColor: 'rgba(100,212,240,0.1)',
+            borderColor: '#1c398e', backgroundColor: 'rgba(28,57,142,0.08)',
             borderWidth: 2, tension: 0.2, fill: true, pointRadius: 3, yAxisID: 'y1', order: 1 },
         ]
       },
@@ -1099,10 +1107,10 @@
         },
         scales: {
           x: gridOpt.x,
-          y1: { type: 'linear', position: 'left',  grid: { color: 'rgba(255,255,255,0.04)' },
-                ticks: { color: '#64d4f0', callback: v => '$' + (v/1000).toFixed(0) + 'B' } },
+          y1: { type: 'linear', position: 'left',  grid: { color: 'rgba(15,23,43,0.06)' },
+                ticks: { color: '#1c398e', callback: v => '$' + (v/1000).toFixed(0) + 'B' } },
           y2: { type: 'linear', position: 'right', grid: { display: false },
-                ticks: { color: '#c8f064', callback: v => '$' + (v/1000).toFixed(0) + 'B' } }
+                ticks: { color: '#059669', callback: v => '$' + (v/1000).toFixed(0) + 'B' } }
         }
       }
     });
@@ -1117,9 +1125,9 @@
         datasets: [
           { type: 'scatter', label: 'Monthly excess returns',
             data: BETA_PTS.map(p => ({ x: p[0], y: p[1] })),
-            backgroundColor: 'rgba(100,212,240,0.65)', borderColor: '#64d4f0', pointRadius: 4 },
+            backgroundColor: 'rgba(20,71,230,0.5)', borderColor: '#1447e6', pointRadius: 4 },
           { type: 'line', label: 'Fit: (Re−Rf) = −0.008 + 1.072·(Rm−Rf)',
-            data: fitLine, borderColor: '#c8f064', borderWidth: 2,
+            data: fitLine, borderColor: '#1c398e', borderWidth: 2,
             backgroundColor: 'transparent', pointRadius: 0, tension: 0, fill: false }
         ]
       },
@@ -1130,12 +1138,12 @@
           tooltip: { callbacks: { label: ctx => '(' + (ctx.parsed.x*100).toFixed(2) + '%, ' + (ctx.parsed.y*100).toFixed(2) + '%)' } }
         },
         scales: {
-          x: { type: 'linear', grid: { color: 'rgba(255,255,255,0.04)' },
-               title: { display: true, text: '(Rm − Rf) — Market excess return', color: '#7a8090' },
-               ticks: { color: '#7a8090', callback: v => (v*100).toFixed(0) + '%' } },
-          y: { type: 'linear', grid: { color: 'rgba(255,255,255,0.04)' },
-               title: { display: true, text: '(Re − Rf) — MMM excess return', color: '#7a8090' },
-               ticks: { color: '#7a8090', callback: v => (v*100).toFixed(0) + '%' } }
+          x: { type: 'linear', grid: { color: 'rgba(15,23,43,0.06)' },
+               title: { display: true, text: '(Rm − Rf) — Market excess return', color: '#64748b' },
+               ticks: { color: '#64748b', callback: v => (v*100).toFixed(0) + '%' } },
+          y: { type: 'linear', grid: { color: 'rgba(15,23,43,0.06)' },
+               title: { display: true, text: '(Re − Rf) — MMM excess return', color: '#64748b' },
+               ticks: { color: '#64748b', callback: v => (v*100).toFixed(0) + '%' } }
         }
       }
     });
@@ -1146,8 +1154,8 @@
       data: {
         labels: LIT_YEARS,
         datasets: [
-          { label: 'PFAS / PWS', data: LIT_PWS, backgroundColor: 'rgba(248,113,113,0.75)' },
-          { label: 'Combat Arms', data: LIT_CAE, backgroundColor: 'rgba(250,204,21,0.75)' },
+          { label: 'PFAS / PWS', data: LIT_PWS, backgroundColor: 'rgba(220,38,38,0.75)' },
+          { label: 'Combat Arms', data: LIT_CAE, backgroundColor: 'rgba(217,119,6,0.78)' },
         ]
       },
       options: {
@@ -1158,7 +1166,7 @@
         },
         scales: {
           x: { ...gridOpt.x, stacked: true },
-          y: { ...gridOpt.y, stacked: true, ticks: { color: '#7a8090', callback: v => '$' + (v/1000).toFixed(1) + 'B' } }
+          y: { ...gridOpt.y, stacked: true, ticks: { color: '#64748b', callback: v => '$' + (v/1000).toFixed(1) + 'B' } }
         }
       }
     });
