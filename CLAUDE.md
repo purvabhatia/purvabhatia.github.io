@@ -10,10 +10,10 @@ To preview locally, open the HTML files directly in a browser (no dev server nee
 
 ## Architecture
 
-The site is **five hand-written source files** plus `assets/`: one shared stylesheet (`style.css`) and four self-contained HTML pages, each owning its own inline `<style>` and `<script>`. There are two kinds of page:
+The site is **six hand-written source files** plus `assets/`: one shared stylesheet (`style.css`) and five self-contained HTML pages, each owning its own inline `<style>` and `<script>`. There are two kinds of page:
 
 - **Portfolio** (`index.html`) — the hub, and the only page with internal section nav.
-- **Leaf pages** (`mortgage.html`, `costco.html`, `3m.html`) — standalone project demos linked from the portfolio's projects section. Each has a shared `<nav>` (logo → `index.html`, "← Back to Projects" → `index.html#projects`) and no internal section anchors.
+- **Leaf pages** (`mortgage.html`, `costco.html`, `3m.html`, `stocks.html`) — standalone project demos linked from the portfolio's projects section. Each has a shared `<nav>` (logo → `index.html`, "← Back to Projects" → `index.html#projects`) and no internal section anchors.
 
 ### CSS split rule (important)
 
@@ -47,6 +47,14 @@ The most involved pages: single-page equity-research write-ups that visualize a 
 
 **Every headline number, chart series, and sensitivity cell on these pages is derived from the page's source workbook and must reconcile to it** — see `assets/` below.
 
+### `stocks.html` — embedded Tableau Public dashboard
+
+A different kind of data page from the DCF showcases: instead of drawing its own charts, it **embeds a published Tableau Public viz** of a single-stock (NVDA) price dashboard. Same leaf-page shell (shared `<nav>`, hero header, KPI strip, numbered sections, footer), but:
+
+- The live viz is a `<tableau-viz>` web component from the **Tableau Embedding API v3** (CDN `<script type="module">` in `<head>` — the site's *second* external runtime dependency, after Chart.js), pointing at the published view (`public.tableau.com/views/NVDAReal-TimeStockDashboard/NVDADashboard`) and framed in a light `.viz-frame` card so the dashboard's own light theme reads intentionally against the dark page.
+- **No figures are hardcoded into the page.** The live numbers live inside the embedded viz; the KPI strip uses only *stable descriptors* (ticker, data window, source, tool) so it can't drift out of sync with the embed. This is the inverse of the DCF pages, where every number must reconcile to a workbook — here there is nothing on the page to reconcile.
+- Data pipeline (see `assets/` below): a **private** Python script (not committed — it holds an Alpha Vantage API key) pulls NVDA daily OHLCV from the Alpha Vantage API → `assets/stock_data.csv` (tracked; the page's download) → the Tableau workbook `assets/NVDA_stock.twb` → published to Tableau Public as an **extract** (a snapshot) → embedded here. To refresh: re-run the script, refresh the workbook's extract, re-publish (the embed updates), and re-commit the CSV. Because the embed is a snapshot, the page labels its freshness in the `.asof` callout.
+
 ### `assets/` — source workbooks are the source of truth
 
 Headshot, resume PDF, and the Excel workbooks that back the data-driven pages:
@@ -59,9 +67,11 @@ Headshot, resume PDF, and the Excel workbooks that back the data-driven pages:
 
 The workbook is the **source of truth and is treated as read-only** — the user edits it in Excel directly, then asks Claude to reconcile the HTML to match (not the other way around). When a workbook changes, update the page's hardcoded numbers and chart data to agree with it; when a page cites a value, it should trace to a cell. The same workbook is also offered as a download from the page, so the copy in `assets/` and the page must stay in sync. Audits of these models (formula/methodology correctness, three-statement reconciliation) are done out-of-band with `openpyxl` by opening the workbook twice — `data_only=True` for computed values and `data_only=False` for formulas — and comparing; never by modifying the workbook.
 
+The **stock-dashboard pipeline is the exception to the reconcile rule** (see `stocks.html` above). `stock_data.csv` (NVDA daily OHLCV) is *regenerated* by the private Python fetch script — not hand-maintained — and is offered as the page's download; `NVDA_stock.twb` is the Tableau workbook published to Tableau Public. The `.twb` is plain XML, so it's audited by reading it directly, not via `openpyxl`. Neither is a hardcoded source for page figures — `stocks.html` embeds the published viz instead of re-stating its numbers — so don't try to reconcile page values to the CSV; there are none.
+
 ## Conventions
 
-- All JavaScript is inline `<script>` at the bottom of each HTML file. There are no external `.js` files and none should be added unless a real need emerges — the site is small enough that an extra HTTP request isn't worth it. (Chart.js, on the DCF pages only, is the lone exception and is CDN-loaded.)
+- All JavaScript is inline `<script>` at the bottom of each HTML file. There are no external `.js` files and none should be added unless a real need emerges — the site is small enough that an extra HTTP request isn't worth it. Two pages load an external library via CDN: **Chart.js** on the DCF pages, and the **Tableau Embedding API** on `stocks.html`.
 - Open Graph meta tags exist on every page — keep them in sync with the page's actual title/description when content changes.
 - Internal nav anchors (`#about`, `#projects`, …) live only on `index.html`; leaf pages link back via `index.html#projects`. Nav links are `display:none` on mobile with no hamburger replacement yet, so don't assume mobile nav works — it's a tracked P0 gap (see `TODO.md`).
 - Keep the two DCF pages visually consistent: they deliberately share one design language, so port patterns between `costco.html` and `3m.html` rather than inventing new ones.

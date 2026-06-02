@@ -32,18 +32,61 @@
 
     .nav-links a:hover { color: var(--text); }
 
+    /* ── NAV BRAND + ALWAYS-ON CONTACT ── */
+    .nav-brand {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      line-height: 1.2;
+    }
+
+    .nav-contact {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: var(--mono-font);
+      font-size: 0.68rem;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+    }
+
+    .nav-contact a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-contact a:hover { color: var(--accent); }
+    .nav-contact-sep { opacity: 0.4; }
+
     /* ── HERO ── */
     #hero {
       min-height: 100vh;
       display: flex;
       align-items: center;
+      justify-content: center;
       padding: 8rem 4rem 4rem;
       position: relative;
       z-index: 1;
     }
 
     .hero-inner {
-      max-width: 900px;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.85fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
 
     .hero-tag {
@@ -68,8 +111,8 @@
 
     h1 {
       font-family: var(--heading-font);
-      font-size: clamp(3rem, 7vw, 5.5rem);
-      line-height: 1.08;
+      font-size: clamp(2.25rem, 4.8vw, 3.5rem);
+      line-height: 1.15;
       font-weight: 400;
       margin-bottom: 1.5rem;
     }
@@ -635,6 +678,7 @@
       nav { padding: 1rem 1.5rem; }
       .nav-links { display: none; }
       #hero, section { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .about-grid { grid-template-columns: 1fr; gap: 2rem; }
       .contact-inner { grid-template-columns: 1fr; }
       .projects-grid { grid-template-columns: 1fr; }
@@ -658,7 +702,16 @@
 
   <!-- NAV -->
   <nav>
-<span class="nav-logo">Purva Bhatia</span>
+    <div class="nav-brand">
+      <span class="nav-logo">Purva Bhatia</span>
+      <span class="nav-contact">
+        <a href="mailto:purvabhatia22@gmail.com">purvabhatia22@gmail.com</a>
+        <span class="nav-contact-sep">·</span>
+        <a href="https://www.linkedin.com/in/purva-bhatia-613a79174/" target="_blank" rel="noopener">LinkedIn</a>
+        <span class="nav-contact-sep">·</span>
+        <a href="tel:+16696490131">+1 669-649-0131</a>
+      </span>
+    </div>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#education">Education</a></li>
@@ -673,14 +726,41 @@
   <div id="hero">
     <div class="hero-glow"></div>
     <div class="hero-inner">
-      <div class="hero-tag">FMVA® Certified · MS Financial Analytics · Class of 2026</div>
-      <h1>Hi, I'm <em>Purva Bhatia</em>.<br>I build valuation models<br>&amp; underwrite credit.</h1>
-      <p class="hero-sub">
-        FMVA® certified analyst with corporate banking experience at ICICI Bank. Seeking roles in FP&amp;A, corporate finance, investment banking, and credit analysis.
-      </p>
-      <div class="hero-actions">
-        <a href="assets/PurvaBhatia_Resume.pdf" class="btn btn-primary" target="_blank">↓ Download Resume</a>
-        <a href="#projects" class="btn btn-outline">View Projects →</a>
+      <div class="hero-grid">
+        <div class="hero-text">
+          <div class="hero-tag">FMVA® Certified · MS Financial Analytics · Class of 2026</div>
+          <h1>Valuation models.<br>Credit decisions.<br><em>Backed by results.</em></h1>
+          <p class="hero-sub">
+            Corporate-banking analyst, ex-ICICI Bank — seeking roles in FP&amp;A, corporate finance, and credit analysis.
+          </p>
+          <div class="hero-actions">
+            <a href="assets/PurvaBhatia_Resume.pdf" class="btn btn-primary" target="_blank">↓ Download Resume</a>
+            <a href="#projects" class="btn btn-outline">View Projects →</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="headshot-wrap">
+            <img src="assets/PurvaBhatia_Headshot.jpg" alt="Purva Bhatia" />
+          </div>
+          <div class="stat-block">
+            <div class="stat-item">
+              <div class="stat-number">$11M+</div>
+              <div class="stat-desc">Credit Approvals Secured</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">4.0</div>
+              <div class="stat-desc">GPA</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">2+</div>
+              <div class="stat-desc">Years Industry Exp.</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">5+</div>
+              <div class="stat-desc">Finance Projects</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -695,11 +775,13 @@
           I'm an <span>FMVA® certified Financial Analytics graduate student</span> at San José State University with an MBA from Narsee Monjee Institute (Dean's List 2023), specializing in financial modeling, valuation, and credit analysis.
         </p>
         <p>
-          Before grad school, I spent over a year as a <span>Relationship Manager in Corporate Banking at ICICI Bank</span>, securing credit approvals exceeding USD 11M and conducting complex group-level financial analysis.
+          Before grad school, I spent over a year as a <span>Credit Analyst/Relationship Manager in Corporate Banking at ICICI Bank</span>, securing credit approvals exceeding USD 11M and conducting complex group-level financial analysis.
         </p>
         <p>
-          Outside of work, I enjoy making pizza, going for a hike, and playing Mario.
+          Outside of work, I'm into strategy board games, organizing culinary outings with classmates, and volunteering in my community.
         </p>
+      </div>
+      <div class="about-right">
         <div class="skills-group">
           <div class="skills-group-label">Tools</div>
           <div class="skills-list">
@@ -721,29 +803,6 @@
             <span class="skill-tag">Credit Underwriting</span>
             <span class="skill-tag">Scenario Analysis</span>
             <span class="skill-tag">Budgeting & Forecasting</span>
-          </div>
-        </div>
-      </div>
-      <div class="about-right">
-        <div class="headshot-wrap">
-          <img src="assets/PurvaBhatia_Headshot.jpg" alt="Purva Bhatia" />
-        </div>
-        <div class="stat-block">
-          <div class="stat-item">
-            <div class="stat-number">4.0</div>
-            <div class="stat-desc">GPA</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">5+</div>
-            <div class="stat-desc">Finance Projects</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">2+</div>
-            <div class="stat-desc">Years Industry Exp.</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-number">$11M+</div>
-            <div class="stat-desc">Credit Approvals Secured</div>
           </div>
         </div>
       </div>
@@ -804,7 +863,7 @@
       <!-- JOB 1 -->
       <div class="timeline-item">
         <div class="timeline-header">
-          <span class="timeline-role">Relationship Manager, Corporate Banking</span>
+          <span class="timeline-role">Credit Analyst/Relationship Manager, Corporate Banking</span>
           <span class="timeline-date">Apr 2023 – July 2024</span>
         </div>
         <div class="timeline-company">ICICI Bank · Mumbai, India</div>
@@ -995,7 +1054,7 @@
         <div class="section-label">06 / Contact</div>
         <h2>Let's connect</h2>
         <p>
-          Open to full-time roles and internships in FP&amp;A, corporate finance, investment banking, and credit analysis.
+          Open to full-time roles and internships in FP&amp;A, corporate finance, and credit analysis.
         </p>
         <a href="assets/PurvaBhatia_Resume.pdf" class="btn btn-primary" target="_blank">↓ Download Resume</a>
       </div>
