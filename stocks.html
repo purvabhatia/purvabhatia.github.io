@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Real-Time Stock Dashboard — Tableau | Purva Bhatia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <meta property="og:title" content="Real-Time Stock Dashboard — Tableau | Purva Bhatia">
+  <meta property="og:description" content="A live NVIDIA (NVDA) stock dashboard — a Python + Alpha Vantage data pipeline feeding an interactive Tableau Public dashboard: current price, day-over-day change, period high/low, price trend, and volume.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://purvabhatia.github.io/stocks.html">
+  <meta property="og:image" content="https://purvabhatia.github.io/assets/PurvaBhatia_Headshot.jpg">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='12' fill='%230d0f14'/><text x='50' y='68' font-family='serif' font-size='48' font-weight='400' fill='%23c8f064' text-anchor='middle'>PB</text></svg>">
+  <script type="module" src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"></script>
+  <style>
+    :root {
+      --green: #4ade80;
+      --yellow: #facc15;
+      --red: #f87171;
+    }
+
+    .nav-back {
+      font-family: var(--mono-font);
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .nav-back:hover { color: var(--text); }
+
+    /* HERO HEADER */
+    .page-header {
+      padding: 8rem 4rem 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    .header-tag {
+      font-family: var(--mono-font);
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .header-tag::before {
+      content: '';
+      display: block; width: 2rem; height: 1px;
+      background: var(--accent);
+    }
+    .page-header h1 {
+      font-family: var(--heading-font);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+    }
+    .page-header h1 em { font-style: italic; color: var(--accent); }
+    .page-header p {
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 300;
+      max-width: 740px;
+      margin-bottom: 1.5rem;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.75rem;
+    }
+    .tag {
+      font-family: var(--mono-font);
+      font-size: 0.68rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 0.32rem 0.7rem;
+    }
+
+    .asof {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      max-width: 740px;
+      padding: 0.7rem 0.95rem;
+      margin-bottom: 1.75rem;
+      background: rgba(250, 204, 21, 0.06);
+      border-left: 2px solid var(--yellow);
+      border-radius: 0 2px 2px 0;
+      font-family: var(--mono-font);
+      font-size: 0.72rem;
+      line-height: 1.65;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+    }
+    .asof strong { color: var(--yellow); font-weight: 500; letter-spacing: 0.04em; }
+    .asof-dot {
+      flex: none;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--yellow);
+      margin-top: 0.45rem;
+      box-shadow: 0 0 8px rgba(250, 204, 21, 0.5);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      font-family: var(--mono-font);
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      border: 1px solid var(--accent);
+    }
+    .btn-primary:hover { background: transparent; color: var(--accent); }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    .glow {
+      position: absolute;
+      top: 0; right: -10%;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(200,240,100,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* MAIN LAYOUT */
+    .main-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 4rem 6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* KPI STRIP */
+    .kpi-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 4rem;
+    }
+    .kpi { background: var(--surface); padding: 1.5rem; }
+    .kpi-label {
+      font-family: var(--mono-font);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .kpi-val {
+      font-family: var(--heading-font);
+      font-size: 1.7rem;
+      color: var(--text);
+      line-height: 1.1;
+    }
+    .kpi-val.accent { color: var(--accent); }
+    .kpi-sub {
+      font-family: var(--mono-font);
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+
+    /* SECTIONS */
+    section.block { margin-bottom: 5rem; }
+    .section-label {
+      font-family: var(--mono-font);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: var(--heading-font);
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      font-weight: 400;
+      margin-bottom: 1rem;
+      line-height: 1.15;
+    }
+    .section-title em { font-style: italic; color: var(--accent); }
+    .section-sub {
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 300;
+      max-width: 760px;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    /* TABLEAU EMBED */
+    .viz-frame {
+      background: #f4f6f9; /* matches the dashboard's own background so it frames cleanly on the dark page */
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      overflow: hidden;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.40);
+    }
+    .viz-frame tableau-viz {
+      display: block;
+      width: 100%;
+      min-height: 880px;
+    }
+    .viz-note {
+      font-family: var(--mono-font);
+      font-size: 0.74rem;
+      color: var(--muted);
+      margin-top: 1rem;
+      text-align: center;
+    }
+    .viz-note a { color: var(--accent); text-decoration: none; }
+    .viz-note a:hover { text-decoration: underline; }
+
+    /* PIPELINE STEPS */
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+    .step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.6rem 1.5rem;
+      position: relative;
+    }
+    .step-num {
+      font-family: var(--mono-font);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 0.85rem;
+    }
+    .step h4 {
+      font-family: var(--body-font);
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .step p {
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+    .step code {
+      font-family: var(--mono-font);
+      font-size: 0.78rem;
+      color: var(--accent2);
+    }
+
+    /* METRIC CARDS */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .metric {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.4rem 1.4rem;
+    }
+    .metric-name {
+      font-family: var(--mono-font);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .metric p {
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .fade-in { animation: fadeUp 0.7s ease both; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 920px) {
+      .pipeline { grid-template-columns: repeat(2, 1fr); }
+      .kpi-strip { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 720px) {
+      .page-header { padding: 7rem 1.5rem 2rem; }
+      .main-wrap { padding: 0 1.5rem 4rem; }
+      .pipeline { grid-template-columns: 1fr; }
+      .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+      .viz-frame tableau-viz { min-height: 1280px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Purva Bhatia</a>
+    <a href="index.html#projects" class="nav-back">← Back to Projects</a>
+  </nav>
+
+  <div class="page-header">
+    <div class="glow"></div>
+    <div class="header-tag">Data Pipeline · Live Tableau Dashboard</div>
+    <h1>Real-Time<br><em>Stock Dashboard</em></h1>
+    <p>A small end-to-end data pipeline behind a live dashboard: a Python script pulls NVIDIA's (NASDAQ: NVDA) daily price history from the Alpha Vantage API, <code>pandas</code> shapes it into a clean OHLCV dataset, and Tableau turns it into an interactive dashboard published to Tableau Public — embedded live below.</p>
+    <div class="tag-row">
+      <span class="tag">Python</span>
+      <span class="tag">pandas</span>
+      <span class="tag">requests</span>
+      <span class="tag">Alpha Vantage API</span>
+      <span class="tag">Tableau</span>
+      <span class="tag">Tableau Public</span>
+    </div>
+    <div class="asof">
+      <span class="asof-dot"></span>
+      <span><strong>Snapshot data as of May 22, 2026</strong> · NVDA daily OHLCV, ~100 trading sessions (Dec 2025 – May 2026) · The dashboard is a published Tableau Public snapshot, refreshed on demand from the Alpha Vantage API — not a streaming live quote.</span>
+    </div>
+    <div class="header-actions">
+      <a href="https://public.tableau.com/app/profile/purva.bhatia./viz/NVDAReal-TimeStockDashboard/NVDADashboard" class="btn btn-primary" target="_blank" rel="noopener">↗ Open in Tableau Public</a>
+      <a href="assets/stock_data.csv" class="btn btn-outline" download>↓ Download CSV</a>
+      <a href="index.html#projects" class="btn btn-outline">← Back to Projects</a>
+    </div>
+  </div>
+
+  <div class="main-wrap">
+
+    <!-- KPI STRIP -->
+    <div class="kpi-strip fade-in">
+      <div class="kpi">
+        <div class="kpi-label">Ticker</div>
+        <div class="kpi-val accent">NVDA</div>
+        <div class="kpi-sub">NVIDIA Corp · NASDAQ</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Data</div>
+        <div class="kpi-val">Daily OHLCV</div>
+        <div class="kpi-sub">Open · High · Low · Close · Vol</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Window</div>
+        <div class="kpi-val">~100 days</div>
+        <div class="kpi-sub">Dec 2025 – May 2026</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Source</div>
+        <div class="kpi-val">Alpha Vantage</div>
+        <div class="kpi-sub">TIME_SERIES_DAILY API</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Published on</div>
+        <div class="kpi-val">Tableau Public</div>
+        <div class="kpi-sub">Embedded live below</div>
+      </div>
+    </div>
+
+    <!-- 01 THE LIVE DASHBOARD -->
+    <section class="block">
+      <div class="section-label">01 / The Dashboard</div>
+      <h2 class="section-title">An interactive NVDA dashboard, <em>embedded live</em>.</h2>
+      <p class="section-sub">The dashboard below is the live Tableau Public viz — fully interactive: hover the price line and volume bars for tooltips, and use the bottom toolbar to full-screen, share, or download it. The KPI tiles (current price, day-over-day change, period high/low) are driven by level-of-detail calculations that always resolve to the latest trading day in the dataset.</p>
+      <div class="viz-frame">
+        <tableau-viz id="nvdaViz"
+          src="https://public.tableau.com/views/NVDAReal-TimeStockDashboard/NVDADashboard"
+          toolbar="bottom" hide-tabs></tableau-viz>
+      </div>
+      <p class="viz-note">Dashboard not loading? <a href="https://public.tableau.com/app/profile/purva.bhatia./viz/NVDAReal-TimeStockDashboard/NVDADashboard" target="_blank" rel="noopener">Open it directly on Tableau Public ↗</a></p>
+    </section>
+
+    <!-- 02 HOW IT WORKS -->
+    <section class="block">
+      <div class="section-label">02 / How It Works</div>
+      <h2 class="section-title">From API call to <em>published dashboard</em>.</h2>
+      <p class="section-sub">The project is a four-stage pipeline. Each stage hands a clean artifact to the next — the same pattern used for a production data feed, scaled down to a single ticker.</p>
+      <div class="pipeline fade-in">
+        <div class="step">
+          <div class="step-num">01 · FETCH</div>
+          <h4>Pull from the API</h4>
+          <p>A Python script calls the Alpha Vantage <code>TIME_SERIES_DAILY</code> endpoint for NVDA over HTTPS using <code>requests</code>, returning the latest 100 trading days as JSON.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">02 · SHAPE</div>
+          <h4>Clean &amp; structure</h4>
+          <p><code>pandas</code> parses the JSON into a tidy table — Date, Open, High, Low, Close, Volume — typed, sorted ascending by date, and written to <code>stock_data.csv</code>.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">03 · MODEL</div>
+          <h4>Build in Tableau</h4>
+          <p>Tableau reads the CSV. Level-of-detail calcs anchor the KPI tiles to the newest date, so current price and day-over-day change stay correct as the data refreshes.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">04 · PUBLISH</div>
+          <h4>Ship to the web</h4>
+          <p>The data is extracted into the workbook and published to Tableau Public; this page embeds that live viz via the Tableau Embedding API.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 WHAT'S ON THE DASHBOARD -->
+    <section class="block">
+      <div class="section-label">03 / What's on the Dashboard</div>
+      <h2 class="section-title">Five views of the <em>same daily series</em>.</h2>
+      <p class="section-sub">Every tile is derived from the one OHLCV dataset. The figures reflect the published snapshot's last trading day; they update whenever the workbook is refreshed and re-published.</p>
+      <div class="metric-grid fade-in">
+        <div class="metric">
+          <div class="metric-name">Current Price</div>
+          <p>The closing price on the most recent trading day in the data, resolved with a <code>FIXED</code> LOD on the max date.</p>
+        </div>
+        <div class="metric">
+          <div class="metric-name">Day Change %</div>
+          <p>Percentage move versus the prior trading day's close — signed, so declines read correctly in red.</p>
+        </div>
+        <div class="metric">
+          <div class="metric-name">Period High / Low</div>
+          <p>Highest high and lowest low across the ~5-month window. Labelled "period," not 52-week — the free daily feed only returns 100 sessions.</p>
+        </div>
+        <div class="metric">
+          <div class="metric-name">Price Trend</div>
+          <p>A line of daily closing prices across the full window, showing the recent trajectory.</p>
+        </div>
+        <div class="metric">
+          <div class="metric-name">Volume</div>
+          <p>Daily share volume as bars beneath the price line, for spotting conviction behind moves.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <p>Real-Time Stock Dashboard · Built by Purva Bhatia · purvabhatia.github.io</p>
+  </footer>
+
+</body>
+</html>

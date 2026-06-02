@@ -10,7 +10,8 @@
       "Bash(del \"F:\\\\Purva\\\\purvabhatia.github.io\\\\_audit_lit_tmp.py\")",
       "PowerShell(python F:\\\\Purva\\\\purvabhatia.github.io\\\\_audit_tmp.py)",
       "PowerShell(Remove-Item *)",
-      "PowerShell(python F:\\\\Purva\\\\purvabhatia.github.io\\\\_audit_recon.py)"
+      "PowerShell(python F:\\\\Purva\\\\purvabhatia.github.io\\\\_audit_recon.py)",
+      "WebFetch(domain:public.tableau.com)"
     ]
   }
 }
