@@ -18,7 +18,7 @@ The site is **six hand-written source files** plus `assets/`: one shared stylesh
 ### CSS split rule (important)
 
 - `style.css` is the **shared design system only**: `:root` color/font tokens (a **light** theme — white / slate surfaces, a **navy-blue** accent, near-black slate text, and **Inter** for all type), body reset, fixed nav, footer, and a faint full-viewport grid overlay (`body::after`). Anything visible on every page lives here.
-- Each HTML file owns a large `<style>` block for **page-specific** rules (hero, sections, project cards, mortgage calculator UI, DCF tables/heatmaps/charts, etc.). `mortgage.html` and the DCF pages also re-declare `:root` to add page-local tokens (e.g. `mortgage.html` adds `--green` / `--yellow` / `--red` for affordability indicators).
+- Each HTML file owns a large `<style>` block for **page-specific** rules (hero, sections, project cards, mortgage calculator UI, DCF tables/heatmaps/charts, etc.). The directional/semantic finance colors (`--green` / `--yellow` / `--red`, plus the DCF-scenario `--bull` / `--base` / `--bear`, where `--bull`/`--base`/`--bear` alias `--green`/`--accent2`/`--red`) live in the shared `style.css` `:root` — **no page re-declares `:root` locally** anymore.
 - When changing visuals, decide first: shared (edit `style.css`) or page-local (edit the `<style>` block in that HTML file). Don't move page-specific rules into `style.css` — it would force every page to load CSS it doesn't use.
 
 ### `index.html` — portfolio

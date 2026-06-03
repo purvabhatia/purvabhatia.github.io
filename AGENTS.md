@@ -10,7 +10,7 @@ Six source files plus `assets/`:
 
 - `style.css` — shared design system (`:root` tokens — light theme: white/slate surfaces, navy-blue accent, Inter type; body, nav, footer, faint grid overlay)
 - `index.html` — main portfolio (hero, about, education, experience, projects, certifications, contact); the only page with internal section nav. Project cards link out to the leaf pages with a "Live Demo" button and a download.
-- `mortgage.html` — mortgage affordability calculator sub-page (data tables + `calculate()`); page-specific `<style>` with extra `:root` overrides (`--green`, `--yellow`, `--red`)
+- `mortgage.html` — mortgage affordability calculator sub-page (data tables + `calculate()`); page-specific `<style>`. The `--green` / `--yellow` / `--red` affordability colors now come from the shared `style.css` tokens (no page-local `:root`)
 - `costco.html`, `3m.html` — DCF valuation showcase pages: single-page equity-research write-ups with Chart.js charts, a WACC × terminal-growth sensitivity heatmap, and a KPI strip
 - `stocks.html` — embeds a published **Tableau Public** dashboard (single-stock NVDA) via the Tableau Embedding API; backed by a Python → Alpha Vantage → CSV pipeline, not by hardcoded figures
 - Leaf pages (`mortgage`, `costco`, `3m`, `stocks`) share a `<nav>` linking back to `index.html#projects` and have no internal section anchors.

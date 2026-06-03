@@ -7,6 +7,15 @@
   --accent2: #1447e6;
   --text: #0f172b;
   --muted: #64748b;
+
+  /* Directional / semantic finance colors — shared by the calculator + DCF pages */
+  --green: #059669;
+  --yellow: #d97706;
+  --red: #dc2626;
+  --bull: var(--green);
+  --base: var(--accent2);
+  --bear: var(--red);
+
   --heading-font: 'Inter', sans-serif;
   --body-font: 'Inter', sans-serif;
   --mono-font: 'DM Mono', monospace;
